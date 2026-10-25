@@ -12,7 +12,10 @@ import { unconfiguredSource, type PortalDataSource } from './source.ts'
 export async function createDataSource(): Promise<PortalDataSource> {
   if (import.meta.env.DEV && import.meta.env.VITE_PORTAL_SOURCE === 'fixture') {
     const { createFixtureSource } = await import('../fixtures/fixtureSource.ts')
-    return createFixtureSource(currentTime)
+    // `?waves=0..6` picks how many preliminary waves are complete in the demo.
+    const waves = Number(new URLSearchParams(window.location.search).get('waves'))
+    const completedWaves = Number.isInteger(waves) && waves >= 0 && waves <= 6 ? waves : undefined
+    return createFixtureSource(currentTime, { completedWaves })
   }
   const apiUrl = validApiUrl(import.meta.env.VITE_PORTAL_API_URL)
   return apiUrl ? createHttpSource(apiUrl) : unconfiguredSource
