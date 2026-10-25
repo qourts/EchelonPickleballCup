@@ -1,5 +1,6 @@
 import type { Phase } from '../config/publication.ts'
 import { phaseAt } from '../domain/publication.ts'
+import { eventInstant } from '../domain/schedule.ts'
 import type { Match } from '../domain/types.ts'
 import {
   NotPublishedError,
@@ -21,8 +22,12 @@ export function redactForPhase(matches: readonly Match[], phase: Phase): Match[]
  */
 export function createFixtureSource(getNow: () => Date, options: DemoOptions = {}): PortalDataSource {
   const teams = buildDemoTeams()
-  const matches = buildDemoMatches(teams, options)
   const phase = () => phaseAt(getNow())
+  // Without an explicit `completedWaves`, the demo day follows the clock.
+  const matchesNow = () => {
+    const sinceMidnight = (getNow().getTime() - Date.parse(eventInstant(0))) / 60_000
+    return buildDemoMatches(teams, { ...options, nowMinutes: sinceMidnight })
+  }
 
   return {
     kind: 'fixture',
@@ -33,7 +38,7 @@ export function createFixtureSource(getNow: () => Date, options: DemoOptions = {
     },
     getMatches: (): Promise<Loaded<Match>> => {
       if (phase() < 2) return Promise.reject(new NotPublishedError('The match schedule'))
-      return Promise.resolve({ items: redactForPhase(matches, phase()), skipped: 0 })
+      return Promise.resolve({ items: redactForPhase(matchesNow(), phase()), skipped: 0 })
     },
   }
 }

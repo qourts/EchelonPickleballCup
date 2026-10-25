@@ -20,7 +20,7 @@ export function stageLabel(match: Match): string {
   }
 }
 
-function sideName(match: Match, side: 'a' | 'b', teamsById: ReadonlyMap<string, Team>): string {
+export function sideName(match: Match, side: 'a' | 'b', teamsById: ReadonlyMap<string, Team>): string {
   const id = side === 'a' ? match.teamAId : match.teamBId
   if (id) return teamLabel(teamsById.get(id))
   return (side === 'a' ? match.labelA : match.labelB) ?? 'To be determined'

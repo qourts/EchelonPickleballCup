@@ -17,6 +17,8 @@ export const FIXTURE_MARKER = 'ECHELON_SYNTHETIC_FIXTURE_DO_NOT_SHIP'
 export interface DemoOptions {
   /** How many preliminary waves (0-6) have been completed. The next wave is shown as live. */
   readonly completedWaves?: number
+  /** Minutes since midnight on event day. Drives completed/live/scheduled per category block. */
+  readonly nowMinutes?: number
   readonly seed?: number
 }
 
@@ -63,7 +65,9 @@ export function buildDemoTeams(): Team[] {
 }
 
 export function buildDemoMatches(teams: readonly Team[], options: DemoOptions = {}): Match[] {
-  const { completedWaves = 6, seed = 2026 } = options
+  const { seed = 2026, nowMinutes } = options
+  const timeMode = nowMinutes !== undefined && options.completedWaves === undefined
+  const completedWaves = options.completedWaves ?? 6
   const random = mulberry32(seed)
   const strength = new Map(teams.map((t) => [t.id, random()]))
   const matches: Match[] = []
@@ -77,8 +81,11 @@ export function buildDemoMatches(teams: readonly Team[], options: DemoOptions = 
           .sort((x, y) => x.slot - y.slot)
         if (bracketTeams.length !== 4) return
         for (const pairing of roundRobinPairings(bracketTeams.map((t) => t.id))) {
-          const completed = pairing.round <= completedWaves
-          const live = pairing.round === completedWaves + 1 && completedWaves > 0
+          const waveStart = block.startMinutes + (pairing.round - 1) * 20
+          const completed = timeMode ? waveStart + 20 <= nowMinutes! : pairing.round <= completedWaves
+          const live = timeMode
+            ? waveStart <= nowMinutes! && nowMinutes! < waveStart + 20
+            : pairing.round === completedWaves + 1 && completedWaves > 0
           const base: Match = {
             id: `${block.category}-${division.code}-${bracket}-r${pairing.round}`,
             stage: 'preliminary',

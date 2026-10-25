@@ -6,6 +6,7 @@ import { PortalProvider } from './hooks/PortalProvider.tsx'
 import { Brackets } from './pages/Brackets.tsx'
 import { Guide } from './pages/Guide.tsx'
 import { Home } from './pages/Home.tsx'
+import { Live } from './pages/Live.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { Playoffs } from './pages/Playoffs.tsx'
 import { Schedule } from './pages/Schedule.tsx'
@@ -29,6 +30,14 @@ export function App({ source }: { source: PortalDataSource }) {
               element={
                 <Gated section="brackets">
                   <Brackets />
+                </Gated>
+              }
+            />
+            <Route
+              path="live"
+              element={
+                <Gated section="live">
+                  <Live />
                 </Gated>
               }
             />

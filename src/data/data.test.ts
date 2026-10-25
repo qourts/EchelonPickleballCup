@@ -53,7 +53,7 @@ describe('server-side release gating (fixture mirrors the API contract)', () => 
   })
 
   it('adds live status and scores in Phase 3', async () => {
-    const source = createFixtureSource(at('2026-11-21T00:00:00+08:00'))
+    const source = createFixtureSource(at('2026-11-21T13:00:00+08:00'))
     const { items } = await source.getMatches()
     expect(items.some((m) => m.status === 'completed' && m.official)).toBe(true)
   })
@@ -162,5 +162,16 @@ describe('portal API url validation', () => {
     expect(validApiUrl('nonsense')).toBeNull()
     expect(validApiUrl(undefined)).toBeNull()
     error.mockRestore()
+  })
+})
+
+describe('demo day follows the clock', () => {
+  it('has live matches only inside the running block and nothing played before the start', async () => {
+    const morning = await createFixtureSource(at('2026-11-21T09:30:00+08:00')).getMatches()
+    const live = morning.items.filter((m) => m.status === 'live')
+    expect(live.length).toBeGreaterThan(0)
+    expect(live.every((m) => m.category === 'genderless')).toBe(true)
+    const early = await createFixtureSource(at('2026-11-21T08:00:00+08:00')).getMatches()
+    expect(early.items.some((m) => m.status !== 'scheduled')).toBe(false)
   })
 })

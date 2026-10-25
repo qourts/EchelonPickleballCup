@@ -8,6 +8,7 @@ import { PageHeader } from './ui.tsx'
 
 const TITLES: Partial<Record<PortalSection, string>> = {
   brackets: 'Brackets & player search',
+  live: 'Live & upcoming',
   standings: 'Standings',
   playoffs: 'Playoffs',
 }

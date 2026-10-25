@@ -5,7 +5,7 @@ import { isSectionPublished } from '../domain/publication.ts'
 import type { PortalSection } from '../config/publication.ts'
 import { usePortal } from '../hooks/portalContext.ts'
 import { ErrorBoundary } from './ErrorBoundary.tsx'
-import { BracketIcon, CalendarIcon, GuideIcon, HomeIcon, TrophyIcon } from './icons.tsx'
+import { BracketIcon, CalendarIcon, GuideIcon, HomeIcon, LiveIcon, TrophyIcon } from './icons.tsx'
 import { RegisterButton } from './ui.tsx'
 
 interface NavItem {
@@ -21,6 +21,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { to: '/guide', label: 'Guide', section: 'guide', icon: <GuideIcon /> },
   { to: '/schedule', label: 'Schedule', section: 'schedule', icon: <CalendarIcon /> },
   { to: '/brackets', label: 'Brackets', section: 'brackets', icon: <BracketIcon /> },
+  { to: '/live', label: 'Live', section: 'live', icon: <LiveIcon /> },
   { to: '/standings', label: 'Results', section: 'standings', icon: <TrophyIcon /> },
 ]
 

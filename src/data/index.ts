@@ -13,7 +13,8 @@ export async function createDataSource(): Promise<PortalDataSource> {
   if (import.meta.env.DEV && import.meta.env.VITE_PORTAL_SOURCE === 'fixture') {
     const { createFixtureSource } = await import('../fixtures/fixtureSource.ts')
     // `?waves=0..6` picks how many preliminary waves are complete in the demo.
-    const waves = Number(new URLSearchParams(window.location.search).get('waves'))
+    const raw = new URLSearchParams(window.location.search).get('waves')
+    const waves = raw === null ? Number.NaN : Number(raw)
     const completedWaves = Number.isInteger(waves) && waves >= 0 && waves <= 6 ? waves : undefined
     return createFixtureSource(currentTime, { completedWaves })
   }

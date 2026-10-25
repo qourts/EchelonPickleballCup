@@ -15,6 +15,7 @@ Registration is handled on the organizer's existing form, not on this site.
 | --- | --- | --- |
 | Home, Player Guide, Schedule | always | Event facts, rules, scoring and the 15-minute rule (with a live converter), standings and seeding explained, FAQ, category blocks, courts |
 | Brackets and player search | Nov 18, 2026, 12:00 AM | Bracket assignments, partial/case-insensitive name search, published match times |
+| Live & upcoming | Nov 21, 2026, 12:00 AM | On court now, up next, a tile per court, and the queue in playing order; refreshes every 30 seconds |
 | Standings and Playoffs | Nov 21, 2026, 12:00 AM | Bracket standings, wildcard and seeds, semifinal pairings, Gold/Bronze, medal results, live refresh |
 
 Without a data feed the site is a complete Player Guide and shows honest pending states. It
@@ -30,7 +31,7 @@ npm run check                # lint + typecheck + tests + production build + dis
 ```
 
 Preview a phase in the dev server with `?now=`, for example
-`http://localhost:5173/?now=2026-11-18T00:00:00%2B08:00#/brackets`.
+`http://localhost:5173/?now=2026-11-18T00:00:00%2B08:00#/brackets`. In demo mode the match day follows `?now=`, so `?now=2026-11-21T09:50:00%2B08:00#/live` shows matches in progress.
 
 Requires Node 20.19+ or 22.12+ (CI uses Node 22).
 

@@ -9,7 +9,7 @@
  */
 export type Phase = 1 | 2 | 3
 
-export type PortalSection = 'home' | 'guide' | 'schedule' | 'brackets' | 'standings' | 'playoffs'
+export type PortalSection = 'home' | 'guide' | 'schedule' | 'brackets' | 'live' | 'standings' | 'playoffs'
 
 export const PUBLICATION = {
   timezone: 'Asia/Manila',
@@ -28,6 +28,7 @@ export const SECTION_MIN_PHASE: Record<PortalSection, Phase> = {
   guide: 1,
   schedule: 1,
   brackets: 2,
+  live: 3,
   standings: 3,
   playoffs: 3,
 }

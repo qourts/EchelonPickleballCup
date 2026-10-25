@@ -25,6 +25,13 @@ const CARDS: readonly PortalCard[] = [
     opens: PHASE_OPENS_LABEL[2],
   },
   {
+    section: 'live',
+    to: '/live',
+    title: 'Live & upcoming',
+    text: 'What is on court now, what plays next and the queue.',
+    opens: PHASE_OPENS_LABEL[3],
+  },
+  {
     section: 'standings',
     to: '/standings',
     title: 'Standings & playoffs',
