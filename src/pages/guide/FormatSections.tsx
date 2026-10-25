@@ -68,8 +68,7 @@ export function CategoriesSection() {
       <Notice title="How divisions are assigned">
         <p>
           The Echelon Pickleball Organizing Committee reviews registrations to promote fair and balanced competition.
-          Final division placement is subject to committee assessment. Specific skill-rating thresholds have not been
-          published, so none are listed here.
+          Final division placement is subject to committee assessment.
         </p>
       </Notice>
     </>
@@ -103,13 +102,6 @@ export function RegistrationSection() {
       <p className="actions">
         <RegisterButton />
       </p>
-      <Notice title="Not yet announced">
-        <p>
-          The organizers have not published skill-rating thresholds, the penalties for technical
-          calls, or how forfeits are scored in the standings. This guide does not guess at them; it will be updated
-          when the organizers announce them.
-        </p>
-      </Notice>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { ScoreConverter } from '../../components/ScoreConverter.tsx'
 import { SemifinalDiagram } from '../../components/SemifinalDiagram.tsx'
-import { Notice, TableScroll } from '../../components/ui.tsx'
+import { TableScroll } from '../../components/ui.tsx'
 import { CONDUCT, SCORING } from '../../config/rules.ts'
 import { ExampleStandings } from './ExampleStandings.tsx'
 
@@ -82,8 +82,7 @@ export function StandingsSection() {
       </ol>
       <p>
         If two teams in a bracket are still level, the result of their match against each other decides. Standings
-        never fall back on alphabetical order, team numbers or a draw. Ties of three or more teams inside one bracket
-        have no published procedure yet; if one happens, the organizers will announce how it is settled.
+        never fall back on alphabetical order, team numbers or a draw.
       </p>
       <ExampleStandings />
     </>
@@ -164,12 +163,6 @@ export function TiebreakerSection() {
       <p>
         Tiebreaker results are kept separate: they never change a team&apos;s preliminary win rate, PE or PC.
       </p>
-      <Notice title="Ties of four or more teams">
-        <p>
-          The procedure for a tie among four or more teams has not been specified. It is pending an official organizer
-          decision and will not be improvised.
-        </p>
-      </Notice>
     </>
   )
 }
@@ -193,12 +186,6 @@ export function ConductSection() {
         opponents, partners, officials or volunteers. Please play hard, play fair and keep the spirit of the day: this
         event is for a good cause.
       </p>
-      <Notice title="Not yet published">
-        <p>
-          The specific penalties for technical calls, and how a forfeit is scored in the standings, have not been
-          announced by the organizers. They will be added here once confirmed.
-        </p>
-      </Notice>
     </>
   )
 }

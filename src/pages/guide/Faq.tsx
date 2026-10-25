@@ -55,7 +55,7 @@ const ITEMS: readonly FaqItem[] = [
   },
   {
     question: 'What is a technical call?',
-    answer: 'A call by tournament officials for unsportsmanlike behavior. The specific penalties have not been announced yet.',
+    answer: 'A call by tournament officials for unsportsmanlike behavior.',
   },
   {
     question: 'What is the registration deadline?',
