@@ -11,6 +11,6 @@ export default defineConfig(({ command, isPreview }) => ({
   plugins: [react()],
   test: {
     environment: 'node',
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', 'reference-api/**/*.test.ts'],
   },
 }))

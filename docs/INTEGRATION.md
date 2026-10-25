@@ -109,6 +109,9 @@ be reached. Phase boundaries by the published schedule are 2026-11-18T00:00:00+0
   preliminary Win Rate, PE or PC.
 * Unreadable records are skipped and counted; the site shows a notice when that happens.
 
+A working reference implementation of this contract, with tests, is in
+[`reference-api/`](../reference-api/README.md).
+
 ## What the portal computes itself
 
 Standings, wildcard selection, seeding, semifinal pairings (including the same-bracket
