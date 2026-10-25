@@ -72,6 +72,14 @@ export function Home() {
         </figure>
       </section>
 
+      <p className="motto" aria-label="Fraternity, Service, Unity">
+        <span>Fraternity</span>
+        <span aria-hidden="true">★</span>
+        <span>Service</span>
+        <span aria-hidden="true">★</span>
+        <span>Unity</span>
+      </p>
+
       <section className="charity-banner" aria-label="Charitable purpose">
         <p className="charity-kicker">Play with purpose</p>
         <p className="charity-text">{EVENT.charityStatement}</p>
