@@ -665,3 +665,32 @@
     padding-block: 18px 40px;
   }
 }
+
+/* The live board uses the full width of the screen (header and footer follow). */
+body:has(.live-head) .container {
+  max-width: none;
+}
+
+@media (min-width: 900px) {
+  body:has(.live-head) .container {
+    padding-inline: 32px;
+  }
+}
+
+@media (min-width: 1400px) {
+  body:has(.live-head) .court-team {
+    font-size: 0.95rem;
+  }
+
+  body:has(.live-head) .court-stage,
+  body:has(.live-head) .court-next {
+    font-size: 0.8rem;
+  }
+}
+
+/* On wide screens the queue flows into columns instead of stretching each row. */
+@media (min-width: 1000px) {
+  body:has(.live-head) .match-list {
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  }
+}
