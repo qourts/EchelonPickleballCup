@@ -46,6 +46,10 @@ const ITEMS: readonly FaqItem[] = [
     answer: `Bracket assignments and player search open on ${PHASE_OPENS_LABEL[2]} at 12:00 AM Philippine time. Standings and playoffs open on ${PHASE_OPENS_LABEL[3]} at 12:00 AM.`,
   },
   {
+    question: 'What is the registration deadline?',
+    answer: `${EVENT.registrationDeadline}. Registration closes after that date; the organizers have not published a cut-off time of day.`,
+  },
+  {
     question: 'Can I register on this website?',
     answer: 'No. This portal is public and read-only. Registration uses the organizer’s official form, and tournament administration is handled outside this website.',
   },

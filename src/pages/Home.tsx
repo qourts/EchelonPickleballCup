@@ -101,7 +101,7 @@ export function Home() {
           <div>
             <p className="fact-label">Registration</p>
             <p className="fact-value">₱{EVENT.feePhp.toLocaleString('en-PH')} per player</p>
-            <p>Includes a jersey and a meal. Winners receive medals.</p>
+            <p>Includes a jersey and a meal. Winners receive medals. Register by {EVENT.registrationDeadline}.</p>
           </div>
         </div>
         <div className="fact">

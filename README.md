@@ -90,6 +90,6 @@ verification steps are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 * Qourts must provide the portal API described in [docs/INTEGRATION.md](docs/INTEGRATION.md)
   before bracket assignments, search, standings and playoffs can show real data.
 * The registration URL was decoded from the poster QR code and has not been tested live.
-* Skill-rating thresholds, check-in, forfeit, attendance and conduct rules are unannounced and
+* The registration deadline is November 14, 2026 (no time of day has been given). Skill-rating thresholds, check-in, forfeit, attendance and conduct rules are unannounced and
   are shown as such.
 * The poster still carries older text (8:00 PM, "Kings Court"); it is shown unchanged.

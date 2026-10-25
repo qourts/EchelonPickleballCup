@@ -87,6 +87,9 @@ export function RegistrationSection() {
           <li key={item}>{item}</li>
         ))}
         <li>{EVENT.prize}</li>
+        <li>
+          Registration deadline: <strong>{EVENT.registrationDeadline}</strong>
+        </li>
       </ul>
       <Notice tone="warn" title="One entry per player">
         <p>
@@ -102,7 +105,7 @@ export function RegistrationSection() {
       </p>
       <Notice title="Not yet announced">
         <p>
-          The organizers have not published a registration deadline, check-in times or procedures, a forfeit or no-show
+          The organizers have not published check-in times or procedures, a forfeit or no-show
           policy, skill-rating thresholds, or conduct and disciplinary rules. This guide does not guess at them; it
           will be updated when the organizers announce them.
         </p>

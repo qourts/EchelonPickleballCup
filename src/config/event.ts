@@ -14,6 +14,7 @@ export const EVENT = {
   timezone: 'Asia/Manila',
   serviceProvider: 'Qourts',
   feePhp: 1500,
+  registrationDeadline: 'November 14, 2026',
   /** Decoded from the QR code on the official poster. Live availability is verified separately. */
   registrationUrl:
     'https://docs.google.com/forms/d/e/1FAIpQLSfXmTeXB74tdgd4rHdJI15Z7sdK9up5l3rR4ykdQ6VJOJjg-g/viewform?usp=header',
