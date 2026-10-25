@@ -730,3 +730,106 @@ body:has(.live-head) .container {
     background: var(--bg);
   }
 }
+
+/* Bracket leaders panel */
+.leaders {
+  margin-top: 16px;
+  padding: 12px 14px 8px;
+  background: linear-gradient(135deg, #131b2b, var(--bg-raised) 70%);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 4px;
+}
+
+.leaders-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.leaders-head h2 {
+  margin: 0 0 4px;
+  font-size: 1.4rem;
+}
+
+.leaders-head p {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.leaders-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px 20px;
+}
+
+.leaders-division h3 {
+  margin: 6px 0 4px;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-2);
+}
+
+.leaders-division ul {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.leader {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+  padding: 4px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+}
+
+.leader-bracket {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  background: var(--panel-2);
+  font-family: var(--font-display);
+  font-weight: 800;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+}
+
+.leader-body p {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+}
+
+.leader-first {
+  font-weight: 700;
+  color: #fff;
+}
+
+.leader-second {
+  color: var(--muted);
+}
+
+.leader-record {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-2);
+}
+
+.leader-second .leader-record {
+  color: var(--muted);
+}
+
+@media (min-width: 900px) {
+  .leaders-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
