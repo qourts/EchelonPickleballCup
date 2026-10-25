@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { EVENT } from '../../config/event.ts'
 import { PHASE_OPENS_LABEL } from '../../config/publication.ts'
-import { SCORING } from '../../config/rules.ts'
+import { CONDUCT, SCORING } from '../../config/rules.ts'
 
 interface FaqItem {
   readonly question: string
@@ -44,6 +44,18 @@ const ITEMS: readonly FaqItem[] = [
   {
     question: 'When will I find out my bracket and schedule?',
     answer: `Bracket assignments and player search open on ${PHASE_OPENS_LABEL[2]} at 12:00 AM Philippine time. Standings and playoffs open on ${PHASE_OPENS_LABEL[3]} at 12:00 AM.`,
+  },
+  {
+    question: 'When do I need to check in?',
+    answer: `At least ${CONDUCT.checkInLeadMinutes / 60} hour before your scheduled match.`,
+  },
+  {
+    question: 'What if my partner or I am late?',
+    answer: `If a team is not present within ${CONDUCT.forfeitGraceMinutes} minutes of the scheduled start time, the match is forfeited and the team that is present is awarded the win.`,
+  },
+  {
+    question: 'What is a technical call?',
+    answer: 'A call by tournament officials for unsportsmanlike behavior. The specific penalties have not been announced yet.',
   },
   {
     question: 'What is the registration deadline?',

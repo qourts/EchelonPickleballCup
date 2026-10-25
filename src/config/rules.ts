@@ -12,6 +12,13 @@ export const SCORING = {
   tiebreakerTarget: 6,
 } as const
 
+export const CONDUCT = {
+  /** Players check in at least this long before their scheduled match. */
+  checkInLeadMinutes: 60,
+  /** A team that is not present and ready this long after the scheduled start forfeits. */
+  forfeitGraceMinutes: 5,
+} as const
+
 export const BRACKET_FORMAT = {
   teamsPerBracket: 4,
   preliminaryMatchesPerBracket: 6,

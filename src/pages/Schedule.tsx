@@ -88,7 +88,8 @@ function BlockPattern() {
       </TableScroll>
       <p className="fine-print">
         Medal matches have no time cap, so their 20-minute window ({BLOCK_PATTERN.at(-1)?.durationMinutes} minutes) is a
-        scheduling target, not a guaranteed finish time. Delays and court changes are handled manually by Qourts and
+        scheduling target, not a guaranteed finish time. Check in at least one hour before your match; a team that is
+        not present within 5 minutes of the scheduled start forfeits. Delays and court changes are handled manually by Qourts and
         appear here once officially published.
       </p>
     </section>

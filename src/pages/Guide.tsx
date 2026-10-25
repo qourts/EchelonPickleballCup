@@ -14,6 +14,7 @@ import {
   SemifinalsSection,
   StandingsSection,
   TiebreakerSection,
+  ConductSection,
 } from './guide/RulesSections.tsx'
 
 interface GuideSection {
@@ -33,6 +34,7 @@ const SECTIONS: readonly GuideSection[] = [
   { id: 'semifinals', label: 'Semifinals', title: 'Semifinal qualification, wildcard and seeding', body: <SemifinalsSection /> },
   { id: 'medals', label: 'Medals', title: 'Gold and Bronze matches', body: <MedalSection /> },
   { id: 'tiebreakers', label: 'Tiebreakers', title: 'Supplemental tiebreakers', body: <TiebreakerSection /> },
+  { id: 'conduct', label: 'Check-in & conduct', title: 'Check-in, forfeits and technical calls', body: <ConductSection /> },
   { id: 'venue', label: 'Schedule & venue', title: 'Event schedule and venue', body: <ScheduleVenueSection /> },
   { id: 'faq', label: 'FAQ', title: 'Quick answers', body: <Faq /> },
 ]

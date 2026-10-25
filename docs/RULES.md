@@ -19,7 +19,13 @@ tournament brief; anything not in the brief is deliberately **not** implemented.
 | Player search: partial, case-insensitive, accent-insensitive, duplicates kept apart | [`domain/search.ts`](../src/domain/search.ts) | `search.test.ts` |
 | Schedule blocks, 20-minute waves, tabulation, semifinal and medal windows, courts | [`config/schedule.ts`](../src/config/schedule.ts) | `data.test.ts` (fixtures use it) |
 
+| Check-in 1 hour before the scheduled match; a team not present within 5 minutes of the scheduled start forfeits to the present team; technical calls for unsportsmanlike behavior | [`config/rules.ts`](../src/config/rules.ts) `CONDUCT`, guide section `ConductSection` | wording only |
+
 ## Pending, never improvised
+
+* Technical-call **penalties** and how a **forfeit is scored** in standings (PE/PC and win rate)
+  have not been specified. Forfeits are not scored automatically; the portal only counts results
+  Match Control publishes as official scores.
 
 * Ties of **four or more teams** (across brackets) report `organizer-decision`.
 * A tie of **three or more teams inside one bracket** after win rate, PE and PC has no stated
@@ -27,8 +33,7 @@ tournament brief; anything not in the brief is deliberately **not** implemented.
   field waits for an organizer decision. The portal never falls back to names, ids or chance.
 * When a 3-team mini round robin is still level, the portal reports that additional race-to-6
   deciders are needed; their format has not been specified.
-* Skill-rating thresholds, check-in, forfeits, attendance and conduct rules are not stated
-  anywhere on the site except as "not yet announced".
+* Skill-rating thresholds are not stated anywhere on the site except as "not yet announced".
 
 ## Interpretation notes
 

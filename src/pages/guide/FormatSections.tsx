@@ -105,9 +105,9 @@ export function RegistrationSection() {
       </p>
       <Notice title="Not yet announced">
         <p>
-          The organizers have not published check-in times or procedures, a forfeit or no-show
-          policy, skill-rating thresholds, or conduct and disciplinary rules. This guide does not guess at them; it
-          will be updated when the organizers announce them.
+          The organizers have not published skill-rating thresholds, the penalties for technical
+          calls, or how forfeits are scored in the standings. This guide does not guess at them; it will be updated
+          when the organizers announce them.
         </p>
       </Notice>
     </>

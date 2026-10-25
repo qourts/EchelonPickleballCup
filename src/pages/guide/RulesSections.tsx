@@ -1,7 +1,7 @@
 import { ScoreConverter } from '../../components/ScoreConverter.tsx'
 import { SemifinalDiagram } from '../../components/SemifinalDiagram.tsx'
 import { Notice, TableScroll } from '../../components/ui.tsx'
-import { SCORING } from '../../config/rules.ts'
+import { CONDUCT, SCORING } from '../../config/rules.ts'
 import { ExampleStandings } from './ExampleStandings.tsx'
 
 export function ScoringSection() {
@@ -168,6 +168,35 @@ export function TiebreakerSection() {
         <p>
           The procedure for a tie among four or more teams has not been specified. It is pending an official organizer
           decision and will not be improvised.
+        </p>
+      </Notice>
+    </>
+  )
+}
+
+export function ConductSection() {
+  return (
+    <>
+      <h3>Check-in</h3>
+      <p>
+        Check in at least <strong>{CONDUCT.checkInLeadMinutes / 60} hour before your scheduled match</strong>.
+      </p>
+      <h3>Late arrival and forfeits</h3>
+      <p>
+        Both partners must be present and ready to play. If a team is not present within{' '}
+        <strong>{CONDUCT.forfeitGraceMinutes} minutes of the scheduled start time</strong>, the match is forfeited and
+        the team that is present is awarded the win.
+      </p>
+      <h3>Technical calls</h3>
+      <p>
+        Tournament officials may issue a technical call for unsportsmanlike behavior, such as disrespect toward
+        opponents, partners, officials or volunteers. Please play hard, play fair and keep the spirit of the day: this
+        event is for a good cause.
+      </p>
+      <Notice title="Not yet published">
+        <p>
+          The specific penalties for technical calls, and how a forfeit is scored in the standings, have not been
+          announced by the organizers. They will be added here once confirmed.
         </p>
       </Notice>
     </>
