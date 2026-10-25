@@ -563,3 +563,105 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* One-screen live board */
+.live-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.live-head h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+}
+
+.live-head .eyebrow {
+  margin-bottom: 0;
+}
+
+.live-summary {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.live-summary strong {
+  color: var(--gold-2);
+}
+
+.court-grid {
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.court-tile {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 8px;
+  min-width: 0;
+}
+
+.court-no {
+  font-size: 1.15rem;
+}
+
+.court-team {
+  font-size: 0.8rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.court-team .match-score {
+  align-self: flex-start;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.court-stage {
+  font-size: 0.66rem;
+}
+
+.court-next {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+  display: grid;
+  gap: 1px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.court-next-label {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-2);
+}
+
+.court-next-teams {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .court-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .court-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body:has(.live-head) .main {
+    padding-block: 18px 40px;
+  }
+}
