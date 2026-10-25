@@ -100,23 +100,25 @@ export function Live() {
 
       {ready && (
         <>
-          <p className="live-summary" aria-live="polite">
-            <strong>{board.live.length}</strong> on court
-            {board.upNext[0] && (
-              <>
-                {' '}
-                · next start <strong>{formatManilaTime(board.upNext[0].startsAt)}</strong>
-              </>
-            )}{' '}
-            · <strong>{board.upNext.length + board.queue.length}</strong> waiting · refreshes every 30 seconds
-          </p>
-          <ul className="court-grid" aria-label="Courts">
-            {board.courts.map((status) => (
-              <CourtTile key={status.court} status={status} teamsById={teamsById} />
-            ))}
-          </ul>
-
-          <section className="section" aria-labelledby="in-queue">
+          <div className="live-layout">
+            <div className="live-main">
+              <p className="live-summary" aria-live="polite">
+                <strong>{board.live.length}</strong> on court
+                {board.upNext[0] && (
+                  <>
+                    {' '}
+                    · next start <strong>{formatManilaTime(board.upNext[0].startsAt)}</strong>
+                  </>
+                )}{' '}
+                · <strong>{board.upNext.length + board.queue.length}</strong> waiting · refreshes every 30 seconds
+              </p>
+              <ul className="court-grid" aria-label="Courts">
+                {board.courts.map((status) => (
+                  <CourtTile key={status.court} status={status} teamsById={teamsById} />
+                ))}
+              </ul>
+            </div>
+          <section className="section live-queue" aria-labelledby="in-queue">
             <h2 id="in-queue">In the queue</h2>
             {waiting.length === 0 ? (
               <p className="muted">No further matches are queued.</p>
@@ -135,6 +137,7 @@ export function Live() {
               </>
             )}
           </section>
+          </div>
         </>
       )}
     </>
