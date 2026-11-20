@@ -35,10 +35,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Optional repository variable (Settings > Secrets and variables > Actions > Variables).
-          # Base URL of the Qourts portal API. Leave unset to deploy the guide-only site.
-          VITE_PORTAL_API_URL: ${{ vars.PORTAL_API_URL }}
 
       - uses: actions/configure-pages@v5
 

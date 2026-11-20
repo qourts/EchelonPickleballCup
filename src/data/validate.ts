@@ -61,7 +61,7 @@ export function parseTeam(value: unknown): Team | null {
   if (!CATEGORY_IDS.has(category) || !DIVISION_IDS.has(division) || !LETTERS.has(bracket)) return null
   const divisionInfo = DIVISIONS.find((d) => d.id === division)
   if (!divisionInfo?.brackets.includes(bracket as BracketLetter)) return null
-  if (slot !== 1 && slot !== 2 && slot !== 3 && slot !== 4) return null
+  if (typeof slot !== 'number' || !Number.isInteger(slot) || slot < 1 || slot > 6) return null
   if (!Array.isArray(value.players)) return null
   const players = value.players.map(parsePlayer)
   if (players.length === 0 || players.some((p) => p === null)) return null

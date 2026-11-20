@@ -1,8 +1,17 @@
-import { ROUND_ROBIN_SEQUENCE } from '../config/rules.ts'
 import type { BracketStanding, StandingRow, TeamRecord } from './standings.ts'
 import type { BracketLetter, Match, Score, Team } from './types.ts'
 
 /** Helpers for building small, explicit scenarios in tests. */
+
+/** A four-team round robin, enough to exercise every ranking rule. */
+const FOUR_TEAM_ORDER: readonly (readonly [number, number])[] = [
+  [1, 2],
+  [3, 4],
+  [1, 3],
+  [2, 4],
+  [1, 4],
+  [3, 2],
+]
 
 export function makeTeam(id: string, bracket: BracketLetter, slot: 1 | 2 | 3 | 4, names: string[] = []): Team {
   return {
@@ -17,7 +26,7 @@ export function makeTeam(id: string, bracket: BracketLetter, slot: 1 | 2 | 3 | 4
 
 /** Six completed preliminary matches for teams listed in slot order, using official scores. */
 export function bracketMatches(teamIds: string[], scores: Score[], prefix = 'm'): Match[] {
-  return ROUND_ROBIN_SEQUENCE.map(([slotA, slotB], i) => ({
+  return FOUR_TEAM_ORDER.map(([slotA, slotB], i) => ({
     id: `${prefix}${i + 1}`,
     stage: 'preliminary' as const,
     category: 'genderless' as const,

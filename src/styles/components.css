@@ -408,3 +408,107 @@
     min-width: 0;
   }
 }
+
+/* Match Control (admin) */
+.admin-signin,
+.admin-teams,
+.admin-score {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-signin {
+  max-width: 420px;
+}
+
+.admin-signin label span,
+.admin-teams label span,
+.admin-score label span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-signin input,
+.admin-teams select,
+.admin-score input {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: 600 1.05rem var(--font-body);
+}
+
+.admin-score {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin: 10px 0;
+}
+
+.admin-score input {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.admin-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.admin-card.is-live {
+  border-left-color: #ff5a5a;
+}
+
+.admin-card.is-completed {
+  border-left-color: var(--ok);
+}
+
+.admin-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+
+.admin-card-head .badge {
+  margin-left: auto;
+}
+
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 0.9rem;
+}
+
+.admin-check input {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-message {
+  margin: 8px 0 0;
+  font-weight: 700;
+  color: var(--gold-2);
+}
+
+.is-break td {
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (min-width: 900px) {
+  .admin-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

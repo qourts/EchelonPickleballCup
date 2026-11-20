@@ -26,7 +26,7 @@ const matches = [
 ]
 
 describe('live board', () => {
-  const board = buildLiveBoard(matches)
+  const board = buildLiveBoard(matches, { courts: [1, 2, 3, 8, 9, 10] })
 
   it('lists matches in progress in court order and leaves finished ones out', () => {
     expect(board.live.map((m) => m.id)).toEqual(['live1', 'live2'])
@@ -44,7 +44,8 @@ describe('live board', () => {
     const court10 = board.courts.find((c) => c.court === 10)!
     expect(court10.live).toBeNull()
     expect(court10.next).toBeNull()
-    expect(board.courts).toHaveLength(10)
+    expect(board.courts.map((c) => c.court)).toEqual([1, 2, 3, 8, 9, 10])
+    expect(buildLiveBoard(matches).courts.map((c) => c.court)).toEqual([8, 9, 10])
   })
 
   it('filters by category', () => {

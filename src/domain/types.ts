@@ -3,7 +3,7 @@
 export type CategoryId = 'genderless' | 'mens' | 'mixed' | 'womens'
 export type DivisionId = 'novice' | 'low-intermediate' | 'high-intermediate'
 export type BracketLetter = 'A' | 'B' | 'C' | 'D'
-export type TeamSlot = 1 | 2 | 3 | 4
+export type TeamSlot = 1 | 2 | 3 | 4 | 5 | 6
 
 export type MatchStage = 'preliminary' | 'semifinal' | 'gold' | 'bronze' | 'tiebreaker'
 export type MatchStatus = 'scheduled' | 'live' | 'completed'

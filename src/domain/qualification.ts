@@ -65,6 +65,8 @@ function rowAt(standing: BracketStanding, index: number): StandingRow | undefine
 export function qualifyDivision(input: QualificationInput): DivisionQualification {
   const { wildcard, brackets, standings, tiebreakerResults } = input
 
+  if (brackets.length === 1) return qualifyGroup(brackets[0]!, standings[brackets[0]!])
+
   if (brackets.length < (wildcard ? 3 : 4)) {
     return { ...empty, status: 'pending', reason: 'Waiting for the brackets of this division to be published.' }
   }
@@ -153,4 +155,42 @@ export function qualifyDivision(input: QualificationInput): DivisionQualificatio
       ]
 
   return { status: 'ready', qualifiers, semifinals, sameBracketException, needs: [] }
+}
+
+/**
+ * One round-robin group per division: the top four by Win Rate, PE, PC (two-team ties by
+ * head-to-head) are seeded #1-#4 and play #1 v #4 and #2 v #3. A tie in the top four that
+ * head-to-head cannot settle is left for the organizers, never guessed.
+ */
+function qualifyGroup(letter: BracketLetter, standing: BracketStanding | undefined): DivisionQualification {
+  if (!standing || standing.status !== 'final') {
+    return { ...empty, status: 'pending', reason: 'Waiting for every round-robin match in this division to finish.' }
+  }
+  const top = standing.rows.slice(0, 4)
+  if (top.length < 4) return { ...empty, status: 'pending', reason: 'This division has fewer than four pairs.' }
+  if (top.some((row) => row.tie === 'unresolved')) {
+    return {
+      ...empty,
+      status: 'organizer-decision',
+      reason: 'Pairs are level in the top four and head-to-head cannot separate them. The organizers will decide the order.',
+    }
+  }
+  const qualifiers: Qualifier[] = top.map((row, i) => ({
+    seed: (i + 1) as 1 | 2 | 3 | 4,
+    teamId: row.teamId,
+    bracket: letter,
+    via: 'bracket-winner',
+    record: row.record,
+  }))
+  const [one, two, three, four] = qualifiers as [Qualifier, Qualifier, Qualifier, Qualifier]
+  return {
+    status: 'ready',
+    qualifiers,
+    semifinals: [
+      { index: 1, a: one, b: four },
+      { index: 2, a: two, b: three },
+    ],
+    sameBracketException: false,
+    needs: [],
+  }
 }

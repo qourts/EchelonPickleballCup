@@ -1,20 +1,5 @@
 import { PUBLICATION } from '../config/publication.ts'
 import { EVENT } from '../config/event.ts'
-import { BLOCK_PATTERN, type BlockSegment, type CategoryBlock } from '../config/schedule.ts'
-
-export interface TimedSegment extends BlockSegment {
-  readonly startMinutes: number
-  readonly endMinutes: number
-}
-
-/** Place the standard block pattern on the clock for one category block. */
-export function timelineFor(block: CategoryBlock): TimedSegment[] {
-  return BLOCK_PATTERN.map((segment) => ({
-    ...segment,
-    startMinutes: block.startMinutes + segment.offsetMinutes,
-    endMinutes: block.startMinutes + segment.offsetMinutes + segment.durationMinutes,
-  }))
-}
 
 /** 540 -> "9:00 AM", 1260 -> "9:00 PM". */
 export function formatClock(totalMinutes: number): string {

@@ -9,8 +9,8 @@ export const EVENT = {
   venue: 'Kingcourts',
   address: 'Brgy. Panipuan, City of San Fernando, Pampanga, Philippines',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Kingcourts+Panipuan+San+Fernando+Pampanga',
-  timetable: '9:00 AM–9:00 PM',
-  courts: 10,
+  timetable: '9:00 AM–3:30 PM',
+  courtNumbers: [8, 9, 10],
   timezone: 'Asia/Manila',
   serviceProvider: 'Qourts',
   feePhp: 1500,
@@ -32,19 +32,16 @@ export interface CategoryInfo {
   readonly pairing: string
 }
 
-/** Listed in tournament-day schedule order. */
+/** This event plays a single doubles category. */
 export const CATEGORIES: readonly CategoryInfo[] = [
-  { id: 'genderless', name: 'Genderless Doubles', short: 'Genderless', pairing: 'Any combination of two players' },
-  { id: 'mens', name: "Men's Doubles", short: "Men's", pairing: 'Two men' },
-  { id: 'mixed', name: 'Mixed Doubles', short: 'Mixed', pairing: 'One man and one woman' },
-  { id: 'womens', name: "Women's Doubles", short: "Women's", pairing: 'Two women' },
+  { id: 'genderless', name: 'Doubles', short: 'Doubles', pairing: 'Any two players' },
 ]
 
 export interface DivisionInfo {
   readonly id: DivisionId
   readonly name: string
   readonly short: string
-  /** One-letter code used in match labels, e.g. "H-A1". */
+  /** One-letter code used in team and match ids, e.g. "N1", "N-R1-C8". */
   readonly code: 'N' | 'L' | 'H'
   readonly brackets: readonly BracketLetter[]
   /** Divisions with three brackets send a best-second-place wildcard to the semifinals. */
@@ -53,14 +50,15 @@ export interface DivisionInfo {
   readonly posterDescriptor: string
 }
 
+/** Each division is one round-robin group of six pairs (bracket "A"). */
 export const DIVISIONS: readonly DivisionInfo[] = [
   {
     id: 'novice',
     name: 'Novice',
     short: 'Novice',
     code: 'N',
-    brackets: ['A', 'B', 'C'],
-    wildcard: true,
+    brackets: ['A'],
+    wildcard: false,
     posterDescriptor: 'New to the game',
   },
   {
@@ -68,18 +66,9 @@ export const DIVISIONS: readonly DivisionInfo[] = [
     name: 'Low Intermediate',
     short: 'Low Int.',
     code: 'L',
-    brackets: ['A', 'B', 'C', 'D'],
+    brackets: ['A'],
     wildcard: false,
     posterDescriptor: 'Improving consistency',
-  },
-  {
-    id: 'high-intermediate',
-    name: 'High Intermediate',
-    short: 'High Int.',
-    code: 'H',
-    brackets: ['A', 'B', 'C'],
-    wildcard: true,
-    posterDescriptor: 'Advanced consistency',
   },
 ]
 
@@ -95,7 +84,7 @@ export function divisionInfo(id: DivisionId): DivisionInfo {
   return found
 }
 
-export const BRACKETS_PER_CATEGORY = DIVISIONS.reduce((sum, d) => sum + d.brackets.length, 0)
-/** Planned capacity if every bracket fills. This is not a count of confirmed registrations. */
-export const PLANNED_BRACKETS = BRACKETS_PER_CATEGORY * CATEGORIES.length
-export const PLANNED_TEAM_POSITIONS = PLANNED_BRACKETS * 4
+/** "Round-robin group" when a division has one bracket, otherwise "Bracket X". */
+export function bracketTitle(division: DivisionId, letter: BracketLetter): string {
+  return divisionInfo(division).brackets.length === 1 ? 'Round-robin group' : `Bracket ${letter}`
+}

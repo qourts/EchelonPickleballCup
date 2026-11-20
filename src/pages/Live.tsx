@@ -3,15 +3,15 @@ import { DataNotice, SkippedNotice } from '../components/DataNotice.tsx'
 import { BracketLeaders } from '../components/BracketLeaders.tsx'
 import { MatchRow, sideName, stageLabel } from '../components/MatchRow.tsx'
 import { Badge, SegmentedControl } from '../components/ui.tsx'
-import { CATEGORIES, EVENT } from '../config/event.ts'
+import { CATEGORIES, DIVISIONS, EVENT } from '../config/event.ts'
 import { buildLiveBoard, type CourtStatus } from '../domain/liveBoard.ts'
 import { formatManilaTime } from '../domain/schedule.ts'
-import type { CategoryId, Match, Team } from '../domain/types.ts'
+import type { DivisionId, Match, Team } from '../domain/types.ts'
 import { useQueryParam } from '../hooks/useQueryParam.ts'
 import { useTournament } from '../hooks/useTournament.ts'
 
-type CategoryFilter = 'all' | CategoryId
-const FILTERS: readonly CategoryFilter[] = ['all', ...CATEGORIES.map((c) => c.id)]
+type DivisionFilter = 'all' | DivisionId
+const FILTERS: readonly DivisionFilter[] = ['all', ...DIVISIONS.map((d) => d.id)]
 const QUEUE_PREVIEW = 12
 
 function MatchList({ matches, teamsById }: { matches: readonly Match[]; teamsById: ReadonlyMap<string, Team> }) {
@@ -65,28 +65,18 @@ function CourtTile({ status, teamsById }: { status: CourtStatus; teamsById: Read
 
 export function Live() {
   const { roster, matches, view, skipped, reload } = useTournament()
-  const [filter, setFilter] = useQueryParam<CategoryFilter>('cat', FILTERS, 'all')
+  const [filter, setFilter] = useQueryParam<DivisionFilter>('div', FILTERS, 'all')
   const [showAllQueue, setShowAllQueue] = useState(false)
 
   const board = useMemo(
     () =>
-      buildLiveBoard(matches.status === 'ready' ? matches.items : [], {
-        category: filter === 'all' ? undefined : filter,
-        courts: EVENT.courts,
-      }),
+      buildLiveBoard(
+        (matches.status === 'ready' ? matches.items : []).filter((m) => filter === 'all' || m.division === filter),
+        { courts: EVENT.courtNumbers },
+      ),
     [matches, filter],
   )
   const ready = matches.status === 'ready' && view !== null
-  const leadersCategory = useMemo<CategoryId>(() => {
-    if (filter !== 'all') return filter
-    const items = matches.status === 'ready' ? matches.items : []
-    const current = items.find((m) => m.status === 'live')
-    if (current) return current.category
-    const latest = items
-      .filter((m) => m.status === 'completed')
-      .sort((x, y) => (y.startsAt ?? '').localeCompare(x.startsAt ?? ''))[0]
-    return latest?.category ?? CATEGORIES[0]!.id
-  }, [filter, matches])
   const teamsById = view?.teamsById ?? new Map<string, Team>()
   const waiting = [...board.upNext, ...board.queue]
   const queue = showAllQueue ? waiting : waiting.slice(0, QUEUE_PREVIEW)
@@ -98,11 +88,11 @@ export function Live() {
           <p className="eyebrow">Tournament day</p>
           <h1>Live &amp; upcoming</h1>
         </div>
-        <SegmentedControl<CategoryFilter>
-          label="Category"
+        <SegmentedControl<DivisionFilter>
+          label="Division"
           value={filter}
           onChange={setFilter}
-          options={[{ value: 'all', label: 'All' }, ...CATEGORIES.map((c) => ({ value: c.id, label: c.short }))]}
+          options={[{ value: 'all', label: 'All' }, ...DIVISIONS.map((d) => ({ value: d.id, label: d.short }))]}
         />
       </header>
       <DataNotice resource={roster} noun="team names" onRetry={reload} />
@@ -128,7 +118,7 @@ export function Live() {
                   <CourtTile key={status.court} status={status} teamsById={teamsById} />
                 ))}
               </ul>
-            {view && <BracketLeaders category={leadersCategory} divisions={view.divisions} />}
+            {view && <BracketLeaders category={CATEGORIES[0]!.id} divisions={view.divisions} />}
             </div>
           <section className="section live-queue" aria-labelledby="in-queue">
             <h2 id="in-queue">In the queue</h2>

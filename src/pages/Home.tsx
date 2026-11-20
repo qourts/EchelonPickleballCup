@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Badge, RegisterButton } from '../components/ui.tsx'
 import { CalendarIcon, PinIcon } from '../components/icons.tsx'
-import { CATEGORIES, DIVISIONS, EVENT } from '../config/event.ts'
+import { DIVISIONS, EVENT } from '../config/event.ts'
+import { TEAMS } from '../config/roster.ts'
+import { teamLabel } from '../domain/tournament.ts'
 import { PHASE_OPENS_LABEL, type PortalSection } from '../config/publication.ts'
 import { isSectionPublished } from '../domain/publication.ts'
 import { usePortal } from '../hooks/portalContext.ts'
@@ -121,12 +123,12 @@ export function Home() {
         </div>
         <div className="fact">
           <div className="fact-number" aria-hidden="true">
-            3
+            5
           </div>
           <div>
             <p className="fact-label">Guaranteed matches</p>
-            <p className="fact-value">Every team plays three</p>
-            <p>Single round robin in brackets of four, on {EVENT.courts} courts.</p>
+            <p className="fact-value">Every pair plays five</p>
+            <p>A round robin of six pairs per division, on courts 8, 9 and 10.</p>
           </div>
         </div>
       </section>
@@ -158,35 +160,21 @@ export function Home() {
       </section>
 
       <section className="section" aria-labelledby="who-plays">
-        <h2 id="who-plays">Four categories, three divisions</h2>
+        <h2 id="who-plays">Two divisions, six pairs each</h2>
         <div className="split">
-          <div className="card">
-            <h3>Categories</h3>
-            <ul className="plain-list">
-              {CATEGORIES.map((c) => (
-                <li key={c.id}>
-                  <strong>{c.name}</strong>
-                  <span>{c.pairing}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="card">
-            <h3>Divisions</h3>
-            <ul className="plain-list">
-              {DIVISIONS.map((d) => (
-                <li key={d.id}>
-                  <strong>{d.name}</strong>
-                  <span>{d.posterDescriptor}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="fine-print">
-              The Echelon Pickleball Organizing Committee reviews registrations to promote fair and balanced
-              competition. Final division placement is subject to committee assessment. Each player may enter only
-              once across the whole tournament.
-            </p>
-          </div>
+          {DIVISIONS.map((d) => (
+            <div key={d.id} className="card">
+              <h3>{d.name}</h3>
+              <ol className="bracket-teams">
+                {TEAMS.filter((t) => t.division === d.id).map((team) => (
+                  <li key={team.id}>
+                    <span className="slot">{team.slot}</span>
+                    <span>{teamLabel(team)}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </div>
       </section>
     </>

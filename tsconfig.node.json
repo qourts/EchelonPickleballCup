@@ -16,5 +16,5 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true
   },
-  "include": ["vite.config.ts", "reference-api"]
+  "include": ["vite.config.ts"]
 }

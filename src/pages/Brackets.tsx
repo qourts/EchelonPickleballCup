@@ -2,7 +2,7 @@ import { useDeferredValue, useMemo, useState } from 'react'
 import { DataNotice, SkippedNotice } from '../components/DataNotice.tsx'
 import { SearchIcon } from '../components/icons.tsx'
 import { Badge, Notice, PageHeader, SegmentedControl } from '../components/ui.tsx'
-import { CATEGORIES, DIVISIONS, categoryInfo, divisionInfo } from '../config/event.ts'
+import { CATEGORIES, DIVISIONS, bracketTitle, categoryInfo, divisionInfo } from '../config/event.ts'
 import { formatManilaTime } from '../domain/schedule.ts'
 import { MIN_QUERY_LENGTH, MAX_RESULTS, normalizeName, searchPlayers, type SearchHit } from '../domain/search.ts'
 import { teamLabel } from '../domain/tournament.ts'
@@ -93,7 +93,7 @@ function PlayerSearch({ teams, matches, teamsById }: { teams: readonly Team[]; m
                     <Badge tone="gold">{categoryInfo(hit.team.category).name}</Badge>
                     <Badge tone="blue">{divisionInfo(hit.team.division).name}</Badge>
                     <Badge>
-                      Bracket {hit.team.bracket} · Team {hit.team.slot}
+                      Pair {hit.team.slot}
                     </Badge>
                   </p>
                   <TeamMatches hit={hit} matches={matches} teamsById={teamsById} />
@@ -120,12 +120,14 @@ function BracketBrowser({ teams }: { teams: readonly Team[] }) {
     <section className="section" aria-labelledby="browse-title">
       <h2 id="browse-title">Bracket assignments</h2>
       <div className="filters">
-        <SegmentedControl<CategoryId>
-          label="Category"
-          value={category}
-          onChange={setCategory}
-          options={CATEGORIES.map((c) => ({ value: c.id, label: c.short }))}
-        />
+        {CATEGORIES.length > 1 && (
+          <SegmentedControl<CategoryId>
+            label="Category"
+            value={category}
+            onChange={setCategory}
+            options={CATEGORIES.map((c) => ({ value: c.id, label: c.short }))}
+          />
+        )}
         <SegmentedControl<DivisionId>
           label="Division"
           value={division}
@@ -135,8 +137,8 @@ function BracketBrowser({ teams }: { teams: readonly Team[] }) {
       </div>
       <div className="bracket-grid">
         {shown.map(({ letter, teams: bracketTeams }) => (
-          <section key={letter} className="card bracket-card" aria-label={`Bracket ${letter}`}>
-            <h3>Bracket {letter}</h3>
+          <section key={letter} className="card bracket-card" aria-label={bracketTitle(division, letter)}>
+            <h3>{bracketTitle(division, letter)}</h3>
             {bracketTeams.length === 0 ? (
               <p className="muted">No teams assigned yet.</p>
             ) : (

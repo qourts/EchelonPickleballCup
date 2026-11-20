@@ -292,3 +292,55 @@ describe('qualification readiness', () => {
     expect(result.status).toBe('organizer-decision')
   })
 })
+
+describe('single round-robin group (this event)', () => {
+  const group = (specs: readonly Spec[]) => ({ A: bracket('A', specs) })
+  const SIX: readonly Spec[] = [
+    [5, 55, 20],
+    [4, 50, 30],
+    [3, 45, 35],
+    [2, 40, 40],
+    [1, 30, 50],
+    [0, 20, 55],
+  ]
+
+  it('seeds the top four by the standings and pairs #1 v #4 and #2 v #3', () => {
+    const result = qualifyDivision({ wildcard: false, brackets: ['A'], standings: group(SIX), tiebreakerResults: [] })
+    expect(result.status).toBe('ready')
+    expect(result.qualifiers.map((q) => [q.seed, q.teamId])).toEqual([
+      [1, 'A1'],
+      [2, 'A2'],
+      [3, 'A3'],
+      [4, 'A4'],
+    ])
+    expect(result.semifinals.map((s) => [s.a.teamId, s.b.teamId])).toEqual([
+      ['A1', 'A4'],
+      ['A2', 'A3'],
+    ])
+  })
+
+  it('waits until the group is final', () => {
+    const standing = { ...bracket('A', SIX), status: 'in-progress' as const }
+    expect(qualifyDivision({ wildcard: false, brackets: ['A'], standings: { A: standing }, tiebreakerResults: [] }).status).toBe('pending')
+  })
+
+  it('leaves an unresolved tie inside the top four to the organizers', () => {
+    const standing = bracket('A', SIX)
+    const tied = {
+      ...standing,
+      rows: standing.rows.map((row, i) => (i >= 3 && i <= 5 ? { ...row, rank: 4, tie: 'unresolved' as const } : row)),
+    }
+    const result = qualifyDivision({ wildcard: false, brackets: ['A'], standings: { A: tied }, tiebreakerResults: [] })
+    expect(result.status).toBe('organizer-decision')
+    expect(result.qualifiers).toHaveLength(0)
+  })
+
+  it('does not care about ties below the top four', () => {
+    const standing = bracket('A', SIX)
+    const tied = {
+      ...standing,
+      rows: standing.rows.map((row, i) => (i >= 4 ? { ...row, rank: 5, tie: 'unresolved' as const } : row)),
+    }
+    expect(qualifyDivision({ wildcard: false, brackets: ['A'], standings: { A: tied }, tiebreakerResults: [] }).status).toBe('ready')
+  })
+})

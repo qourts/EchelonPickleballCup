@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { buildDemoMatches, buildDemoTeams } from '../fixtures/demoTournament.ts'
 import { createFixtureSource } from '../fixtures/fixtureSource.ts'
-import { createHttpSource } from './httpSource.ts'
+import seedSql from '../../supabase/echelon_cup.sql?raw'
+import { EVENT_MATCHES } from '../config/schedule.ts'
+import { createSupabaseSource } from './supabase.ts'
 import { DataSourceError, NotConfiguredError, NotPublishedError, unconfiguredSource } from './source.ts'
 import { parseMatches, parseRoster, parseStatus } from './validate.ts'
 
@@ -11,24 +13,41 @@ describe('demo tournament structure', () => {
   const teams = buildDemoTeams()
   const matches = buildDemoMatches(teams)
 
-  it('fills 40 brackets of four teams (160 teams) across four categories', () => {
-    expect(teams).toHaveLength(160)
-    const brackets = new Set(teams.map((t) => `${t.category}/${t.division}/${t.bracket}`))
-    expect(brackets.size).toBe(40)
-    for (const category of ['genderless', 'mens', 'mixed', 'womens']) {
-      expect([...brackets].filter((b) => b.startsWith(category))).toHaveLength(10)
-    }
+  it('has two divisions of six pairs', () => {
+    expect(teams).toHaveLength(12)
+    expect(teams.filter((t) => t.division === 'novice')).toHaveLength(6)
+    expect(teams.filter((t) => t.division === 'low-intermediate')).toHaveLength(6)
   })
 
-  it('schedules six distinct preliminary matches per bracket and three per team', () => {
+  it('plays 15 distinct round-robin matches per division, five per pair, three per round on courts 8-10', () => {
     const prelims = matches.filter((m) => m.stage === 'preliminary')
-    expect(prelims).toHaveLength(240)
+    expect(prelims).toHaveLength(30)
     const perTeam = new Map<string, number>()
+    const pairs = new Set<string>()
     for (const m of prelims) {
       perTeam.set(m.teamAId!, (perTeam.get(m.teamAId!) ?? 0) + 1)
       perTeam.set(m.teamBId!, (perTeam.get(m.teamBId!) ?? 0) + 1)
+      pairs.add([m.teamAId, m.teamBId].sort().join('-'))
     }
-    expect([...perTeam.values()].every((n) => n === 3)).toBe(true)
+    expect(pairs.size).toBe(30)
+    expect([...perTeam.values()].every((n) => n === 5)).toBe(true)
+    const slots = new Map<string, number[]>()
+    for (const m of prelims) slots.set(m.startsAt!, [...(slots.get(m.startsAt!) ?? []), m.court!])
+    expect([...slots.values()].every((courts) => courts.sort().join() === '10,8,9')).toBe(true)
+  })
+
+  it('matches the matches seeded in supabase/echelon_cup.sql exactly', () => {
+    const seeded = [
+      ...seedSql.matchAll(/\('([NL]-[A-Z0-9-]+)', '([a-z-]+)', '([a-z]+)', (\d+), (\d+), '([^']+)', (null|'[NL]\d'), (null|'[NL]\d')\)/g),
+    ]
+    expect(seeded).toHaveLength(EVENT_MATCHES.length)
+    for (const [, id, division, stage, round, court, starts, home, away] of seeded) {
+      const m = EVENT_MATCHES.find((x) => x.id === id)!
+      expect([m.division, m.stage, m.round, m.court]).toEqual([division, stage, Number(round), Number(court)])
+      expect(Date.parse(m.startsAt!)).toBe(Date.parse(starts!.replace(' ', 'T').replace('+08', '+08:00')))
+      const unquote = (v: string | undefined) => (v === 'null' ? null : v!.slice(1, -1))
+      expect([m.teamAId, m.teamBId]).toEqual([unquote(home), unquote(away)])
+    }
   })
 
   it('keeps original on-court scores apart from adjusted official scores', () => {
@@ -47,7 +66,7 @@ describe('server-side release gating (fixture mirrors the API contract)', () => 
 
   it('serves the roster and an unscored schedule in Phase 2', async () => {
     const source = createFixtureSource(at('2026-11-18T00:00:00+08:00'))
-    expect((await source.getRoster()).items).toHaveLength(160)
+    expect((await source.getRoster()).items).toHaveLength(12)
     const { items } = await source.getMatches()
     expect(items.every((m) => m.status === 'scheduled' && !m.official && !m.onCourt)).toBe(true)
   })
@@ -73,7 +92,7 @@ describe('response validation', () => {
       teams: [
         {
           id: 't1',
-          category: 'mixed',
+          category: 'genderless',
           division: 'novice',
           bracket: 'A',
           slot: 1,
@@ -89,9 +108,9 @@ describe('response validation', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const result = parseRoster({
       teams: [
-        { id: 't1', category: 'mixed', division: 'novice', bracket: 'A', slot: 1, players: [{ id: 'p', name: 'Ok Name' }] },
+        { id: 't1', category: 'genderless', division: 'novice', bracket: 'A', slot: 1, players: [{ id: 'p', name: 'Ok Name' }] },
         { id: 't2', category: 'nope', division: 'novice', bracket: 'A', slot: 1, players: [] },
-        { id: 't3', category: 'mixed', division: 'novice', bracket: 'D', slot: 1, players: [{ id: 'p', name: 'Bad Bracket' }] },
+        { id: 't3', category: 'genderless', division: 'novice', bracket: 'D', slot: 1, players: [{ id: 'p', name: 'Bad Bracket' }] },
         null,
       ],
     })
@@ -110,8 +129,8 @@ describe('response validation', () => {
   it('parses matches with and without scores', () => {
     const { items } = parseMatches({
       matches: [
-        { id: 'm1', stage: 'preliminary', category: 'mens', division: 'novice', status: 'scheduled', court: 8, startsAt: '2026-11-21T12:00:00+08:00' },
-        { id: 'm2', stage: 'gold', category: 'mens', division: 'novice', status: 'completed', official: { a: 13, b: 11 } },
+        { id: 'm1', stage: 'preliminary', category: 'genderless', division: 'novice', status: 'scheduled', court: 8, startsAt: '2026-11-21T12:00:00+08:00' },
+        { id: 'm2', stage: 'gold', category: 'genderless', division: 'novice', status: 'completed', official: { a: 13, b: 11 } },
       ],
     })
     expect(items[0]).toMatchObject({ id: 'm1', court: 8, official: null })
@@ -119,58 +138,56 @@ describe('response validation', () => {
   })
 })
 
-describe('http data source', () => {
+describe('Supabase data source', () => {
   afterEach(() => vi.unstubAllGlobals())
 
-  const respond = (status: number, body: unknown = {}) =>
+  const respond = (status: number, body: unknown) =>
     vi.fn().mockImplementation(() => Promise.resolve(new Response(JSON.stringify(body), { status })))
 
-  it('requests uncached, credential-free JSON from the configured base', async () => {
-    const fetchMock = respond(200, { teams: [] })
+  const row = {
+    id: 'N-R1-C8',
+    division: 'novice',
+    stage: 'preliminary',
+    round: 1,
+    court: 8,
+    startsAt: '2026-11-21T09:00:00+08:00',
+    homeId: 'N1',
+    awayId: 'N2',
+    status: 'completed',
+    onCourt: { a: 8, b: 6 },
+    official: { a: 11, b: 6 },
+    capReached: true,
+  }
+
+  it('reads matches through the public function with only the publishable key', async () => {
+    const fetchMock = respond(200, [row, { ...row, id: 'N-SF1', stage: 'semifinal', homeId: null, awayId: null }])
     vi.stubGlobal('fetch', fetchMock)
-    await createHttpSource('https://api.example.test/').getRoster()
-    expect(fetchMock).toHaveBeenCalledOnce()
+    const { items } = await createSupabaseSource().getMatches()
     const [url, init] = fetchMock.mock.calls[0]!
-    expect(url).toBe('https://api.example.test/v1/roster')
-    expect(init).toMatchObject({ cache: 'no-store', credentials: 'omit', method: 'GET' })
+    expect(url).toMatch(/\/rest\/v1\/rpc\/echelon_matches$/)
+    expect(init.headers.apikey).toMatch(/^sb_publishable_/)
+    expect(init.headers.Authorization).toBeUndefined()
+    expect(items[0]).toMatchObject({ teamAId: 'N1', teamBId: 'N2', official: { a: 11, b: 6 }, onCourt: { a: 8, b: 6 } })
+    expect(items[1]).toMatchObject({ semifinalIndex: 1, labelA: 'Seed #1', labelB: 'Seed #4', teamAId: null })
   })
 
-  it('treats 403 and 404 as "not published yet"', async () => {
-    vi.stubGlobal('fetch', respond(403))
-    await expect(createHttpSource('https://api.example.test').getRoster()).rejects.toBeInstanceOf(NotPublishedError)
-    vi.stubGlobal('fetch', respond(404))
-    await expect(createHttpSource('https://api.example.test').getMatches()).rejects.toBeInstanceOf(NotPublishedError)
+  it('serves the published roster from the site', async () => {
+    expect((await createSupabaseSource().getRoster()).items).toHaveLength(12)
   })
 
-  it('reports server and network failures as data source errors', async () => {
-    vi.stubGlobal('fetch', respond(500))
-    await expect(createHttpSource('https://api.example.test').getMatches()).rejects.toBeInstanceOf(DataSourceError)
+  it('reports database and network errors with their message', async () => {
+    vi.stubGlobal('fetch', respond(400, { message: 'Not an admin' }))
+    await expect(createSupabaseSource().getMatches()).rejects.toThrow('Not an admin')
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')))
-    await expect(createHttpSource('https://api.example.test').getStatus()).rejects.toBeInstanceOf(DataSourceError)
-  })
-})
-
-describe('portal API url validation', () => {
-  it('accepts https and localhost http only, without credentials or query', async () => {
-    const { validApiUrl } = await import('./index.ts')
-    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
-    expect(validApiUrl('https://api.example.test/base/')).toBe('https://api.example.test/base')
-    expect(validApiUrl('http://localhost:8787')).toBe('http://localhost:8787')
-    expect(validApiUrl('http://api.example.test')).toBeNull()
-    expect(validApiUrl('https://u:p@api.example.test')).toBeNull()
-    expect(validApiUrl('https://api.example.test?x=1')).toBeNull()
-    expect(validApiUrl('nonsense')).toBeNull()
-    expect(validApiUrl(undefined)).toBeNull()
-    error.mockRestore()
+    await expect(createSupabaseSource().getMatches()).rejects.toBeInstanceOf(DataSourceError)
   })
 })
 
 describe('demo day follows the clock', () => {
-  it('has live matches only inside the running block and nothing played before the start', async () => {
+  it('has live matches only inside the running slot and nothing played before the start', async () => {
     const morning = await createFixtureSource(at('2026-11-21T09:30:00+08:00')).getMatches()
     const live = morning.items.filter((m) => m.status === 'live')
-    expect(live.length).toBeGreaterThan(0)
-    expect(live.every((m) => m.category === 'genderless')).toBe(true)
+    expect(live.map((m) => m.id).sort()).toEqual(['L-R1-C10', 'L-R1-C8', 'L-R1-C9'])
     const early = await createFixtureSource(at('2026-11-21T08:00:00+08:00')).getMatches()
     expect(early.items.some((m) => m.status !== 'scheduled')).toBe(false)
   })

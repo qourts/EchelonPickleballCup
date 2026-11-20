@@ -3,8 +3,8 @@ import { PageHeader } from '../components/ui.tsx'
 import { Faq } from './guide/Faq.tsx'
 import {
   AboutSection,
-  BracketsSection,
-  CategoriesSection,
+  DivisionsSection,
+  FormatSection,
   RegistrationSection,
   ScheduleVenueSection,
 } from './guide/FormatSections.tsx'
@@ -13,7 +13,6 @@ import {
   ScoringSection,
   SemifinalsSection,
   StandingsSection,
-  TiebreakerSection,
   ConductSection,
 } from './guide/RulesSections.tsx'
 
@@ -26,14 +25,13 @@ interface GuideSection {
 
 const SECTIONS: readonly GuideSection[] = [
   { id: 'about', label: 'About', title: 'What this tournament is about', body: <AboutSection /> },
-  { id: 'categories', label: 'Categories', title: 'Categories and skill divisions', body: <CategoriesSection /> },
+  { id: 'divisions', label: 'Divisions', title: 'Divisions and pairs', body: <DivisionsSection /> },
   { id: 'registration', label: 'Registration', title: 'Registration, fee and entry limit', body: <RegistrationSection /> },
-  { id: 'brackets', label: 'Brackets', title: 'Bracket structure and guaranteed matches', body: <BracketsSection /> },
+  { id: 'format', label: 'Format', title: 'Round robin and guaranteed matches', body: <FormatSection /> },
   { id: 'scoring', label: 'Scoring', title: 'Match scoring and the 15-minute rule', body: <ScoringSection /> },
   { id: 'standings', label: 'Standings', title: 'Standings and rankings', body: <StandingsSection /> },
-  { id: 'semifinals', label: 'Semifinals', title: 'Semifinal qualification, wildcard and seeding', body: <SemifinalsSection /> },
+  { id: 'semifinals', label: 'Semifinals', title: 'Semifinals and seeding', body: <SemifinalsSection /> },
   { id: 'medals', label: 'Medals', title: 'Gold and Bronze matches', body: <MedalSection /> },
-  { id: 'tiebreakers', label: 'Tiebreakers', title: 'Supplemental tiebreakers', body: <TiebreakerSection /> },
   { id: 'conduct', label: 'Check-in & conduct', title: 'Check-in, forfeits and technical calls', body: <ConductSection /> },
   { id: 'venue', label: 'Schedule & venue', title: 'Event schedule and venue', body: <ScheduleVenueSection /> },
   { id: 'faq', label: 'FAQ', title: 'Quick answers', body: <Faq /> },

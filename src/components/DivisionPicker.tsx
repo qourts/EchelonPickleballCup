@@ -17,12 +17,14 @@ export function useDivisionChoice() {
 export function DivisionPicker({ category, division, setCategory, setDivision }: ReturnType<typeof useDivisionChoice>) {
   return (
     <div className="filters">
-      <SegmentedControl<CategoryId>
-        label="Category"
-        value={category}
-        onChange={setCategory}
-        options={CATEGORIES.map((c) => ({ value: c.id, label: c.short }))}
-      />
+      {CATEGORIES.length > 1 && (
+        <SegmentedControl<CategoryId>
+          label="Category"
+          value={category}
+          onChange={setCategory}
+          options={CATEGORIES.map((c) => ({ value: c.id, label: c.short }))}
+        />
+      )}
       <SegmentedControl<DivisionId>
         label="Division"
         value={division}

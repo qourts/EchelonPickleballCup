@@ -1,3 +1,4 @@
+import { bracketTitle } from '../config/event.ts'
 import type { Qualifier } from '../domain/qualification.ts'
 import { winRate } from '../domain/standings.ts'
 import { teamLabel, type BracketView } from '../domain/tournament.ts'
@@ -23,10 +24,10 @@ export function StandingsTable({
   return (
     <section className="card standings-card" aria-labelledby={`bracket-${bracket.letter}-${bracket.division}`}>
       <div className="card-head">
-        <h3 id={`bracket-${bracket.letter}-${bracket.division}`}>Bracket {bracket.letter}</h3>
+        <h3 id={`bracket-${bracket.letter}-${bracket.division}`}>{bracketTitle(bracket.division, bracket.letter)}</h3>
         <Badge tone={status.tone}>{status.label}</Badge>
       </div>
-      <TableScroll label={`Bracket ${bracket.letter} standings`}>
+      <TableScroll label={`${bracketTitle(bracket.division, bracket.letter)} standings`}>
         <table className="data-table standings-table">
           <thead>
             <tr>

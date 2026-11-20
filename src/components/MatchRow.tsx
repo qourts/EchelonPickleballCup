@@ -8,7 +8,7 @@ import { Badge } from './ui.tsx'
 export function stageLabel(match: Match): string {
   switch (match.stage) {
     case 'preliminary':
-      return `${divisionInfo(match.division).short} · Bracket ${match.bracket ?? '?'}${match.round ? ` · Wave ${match.round}` : ''}`
+      return `${divisionInfo(match.division).short}${match.round ? ` · Round ${match.round}` : ''}`
     case 'semifinal':
       return `${divisionInfo(match.division).short} · Semifinal${match.semifinalIndex ? ` ${match.semifinalIndex}` : ''}`
     case 'gold':

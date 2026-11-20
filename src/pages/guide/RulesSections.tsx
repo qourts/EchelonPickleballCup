@@ -1,5 +1,4 @@
 import { ScoreConverter } from '../../components/ScoreConverter.tsx'
-import { SemifinalDiagram } from '../../components/SemifinalDiagram.tsx'
 import { TableScroll } from '../../components/ui.tsx'
 import { CONDUCT, SCORING } from '../../config/rules.ts'
 import { ExampleStandings } from './ExampleStandings.tsx'
@@ -34,10 +33,8 @@ export function ScoringSection() {
             </tr>
             <tr>
               <th scope="row">Schedule slot</th>
-              <td>
-                {SCORING.slotMinutes} minutes ({SCORING.matchCapMinutes} play + {SCORING.transitionMinutes} transition)
-              </td>
-              <td>Planned {SCORING.slotMinutes}-minute window (a target only)</td>
+              <td>{SCORING.slotMinutes} minutes</td>
+              <td>Planned {SCORING.slotMinutes}-minute slot (a target only)</td>
             </tr>
           </tbody>
         </table>
@@ -68,7 +65,7 @@ export function ScoringSection() {
 export function StandingsSection() {
   return (
     <>
-      <p>Teams in each bracket are ranked, in this order, by:</p>
+      <p>The six pairs in each division are ranked, in this order, by:</p>
       <ol className="rule-list">
         <li>
           <strong>Highest win rate</strong>
@@ -81,7 +78,7 @@ export function StandingsSection() {
         </li>
       </ol>
       <p>
-        If two teams in a bracket are still level, the result of their match against each other decides. Standings
+        If two pairs are still level, the result of their match against each other decides. Standings
         never fall back on alphabetical order, team numbers or a draw.
       </p>
       <ExampleStandings />
@@ -92,35 +89,17 @@ export function StandingsSection() {
 export function SemifinalsSection() {
   return (
     <>
-      <h3>Novice and High Intermediate (three brackets)</h3>
       <ul className="rule-list">
         <li>
-          The <strong>first-place team from each bracket</strong> qualifies. These three are seeded #1, #2 and #3 by win
-          rate, then PE, then PC.
-        </li>
-        <li>
-          One <strong>wildcard</strong> also qualifies: the best second-place team of the three brackets. It is chosen by
-          comparing only the three second-place teams&apos; preliminary records (win rate, then PE, then PC).
-        </li>
-        <li>
-          The wildcard is always <strong>Seed #4</strong>, even if its record is better than a bracket winner&apos;s.
+          After the round robin, the <strong>top four pairs</strong> in each division qualify for the semifinals, seeded
+          #1 to #4 by the standings above.
         </li>
         <li>
           Semifinals: <strong>Seed #1 v Seed #4</strong> and <strong>Seed #2 v Seed #3</strong>.
         </li>
-        <li>
-          <strong>Exception:</strong> if Seed #1 and the wildcard come from the same preliminary bracket, the pairings
-          become <strong>Seed #1 v Seed #3</strong> and <strong>Seed #2 v Seed #4</strong>, so they do not meet again
-          straight away.
-        </li>
+        <li>Novice plays its semifinals and medal matches on court 8, Low Intermediate on court 10.</li>
       </ul>
-      <SemifinalDiagram />
-      <h3>Low Intermediate (four brackets)</h3>
-      <p>
-        Only the <strong>first-place team from each of the four brackets</strong> advances. They are seeded #1 to #4 by
-        win rate, then PE, then PC, and play <strong>Seed #1 v Seed #4</strong> and <strong>Seed #2 v Seed #3</strong>.
-        There is no wildcard in Low Intermediate.
-      </p>
+      <p>Semifinals use the same scoring as the round robin: first to 11, no deuce, with the 15-minute rule.</p>
     </>
   )
 }
@@ -138,31 +117,6 @@ export function MedalSection() {
         <li>There is no match time cap and no adjusted score.</li>
       </ul>
       <p>Tournament winners receive medals.</p>
-    </>
-  )
-}
-
-export function TiebreakerSection() {
-  return (
-    <>
-      <p>
-        When teams from different brackets are still level on win rate, PE and PC (when seeding bracket winners or
-        choosing the wildcard), the tie is settled on court with supplemental tiebreaker matches. Every tiebreaker match
-        is <strong>first to {SCORING.tiebreakerTarget}, no deuce, no time cap</strong>.
-      </p>
-      <ul className="rule-list">
-        <li>
-          <strong>Two teams tied:</strong> one deciding match.
-        </li>
-        <li>
-          <strong>Three teams tied:</strong> a mini round robin where each team plays the other two once. It is ranked by
-          most tiebreaker wins, then highest tiebreaker PE, then lowest tiebreaker PC. If a tie still remains, further
-          race-to-{SCORING.tiebreakerTarget} deciding matches are played.
-        </li>
-      </ul>
-      <p>
-        Tiebreaker results are kept separate: they never change a team&apos;s preliminary win rate, PE or PC.
-      </p>
     </>
   )
 }

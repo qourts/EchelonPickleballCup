@@ -1,4 +1,3 @@
-import { BRACKET_FORMAT } from '../config/rules.ts'
 import { tryResolveOfficialScore, winningSide } from './scoring.ts'
 import type { Match, Score } from './types.ts'
 
@@ -167,6 +166,6 @@ export function rankBracket(teamIds: readonly string[], matches: readonly Match[
   }
 
   const expectedMatches = (teamIds.length * (teamIds.length - 1)) / 2
-  const isFinal = teamIds.length === BRACKET_FORMAT.teamsPerBracket && completedMatches >= expectedMatches
+  const isFinal = teamIds.length >= 2 && completedMatches >= expectedMatches
   return { status: isFinal ? 'final' : 'in-progress', rows, completedMatches, invalidMatchIds }
 }

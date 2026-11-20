@@ -1,25 +1,18 @@
 import { Link } from 'react-router-dom'
 import { BracketMatrix } from '../../components/BracketMatrix.tsx'
 import { PinIcon } from '../../components/icons.tsx'
-import { Notice, RegisterButton, TableScroll } from '../../components/ui.tsx'
-import {
-  BRACKETS_PER_CATEGORY,
-  CATEGORIES,
-  DIVISIONS,
-  EVENT,
-  PLANNED_BRACKETS,
-  PLANNED_TEAM_POSITIONS,
-} from '../../config/event.ts'
-import { ROUND_ROBIN_SEQUENCE } from '../../config/rules.ts'
-import { CATEGORY_BLOCKS } from '../../config/schedule.ts'
-import { formatRange } from '../../domain/schedule.ts'
+import { Notice, RegisterButton } from '../../components/ui.tsx'
+import { DIVISIONS, EVENT } from '../../config/event.ts'
+import { BRACKET_FORMAT, ROUND_ROBIN_ROUNDS } from '../../config/rules.ts'
+import { TEAMS } from '../../config/roster.ts'
+import { teamLabel } from '../../domain/tournament.ts'
 
 export function AboutSection() {
   return (
     <>
       <p>
         The {EVENT.name} is a one-day doubles tournament on <strong>{EVENT.dateLabel}</strong> at{' '}
-        <strong>{EVENT.venue}</strong>, {EVENT.address}. Play runs from {EVENT.timetable} across {EVENT.courts} courts
+        <strong>{EVENT.venue}</strong>, {EVENT.address}. Play runs from {EVENT.timetable} on courts 8, 9 and 10
         (Philippine time).
       </p>
       <Notice tone="gold" title="Play with purpose">
@@ -27,50 +20,36 @@ export function AboutSection() {
           <strong>{EVENT.charityStatement}</strong>
         </p>
       </Notice>
-      <p>
-        Pickleball enthusiasts of all skill levels are invited to take part. The tournament is open to all, subject to
-        category requirements, tournament eligibility, and committee assessment.
-      </p>
     </>
   )
 }
 
-export function CategoriesSection() {
+export function DivisionsSection() {
   return (
     <>
-      <p>There are four doubles categories. Each one has three skill divisions.</p>
-      <TableScroll label="Categories and pairings">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th scope="col">Category</th>
-              <th scope="col">Who can pair up</th>
-            </tr>
-          </thead>
-          <tbody>
-            {CATEGORIES.map((category) => (
-              <tr key={category.id}>
-                <th scope="row">{category.name}</th>
-                <td>{category.pairing}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </TableScroll>
-      <ul className="division-list">
+      <p>
+        Two divisions play, with {BRACKET_FORMAT.teamsPerBracket} pairs each. The Echelon Pickleball Organizing Committee
+        reviewed registrations and assigned every pair to a division to keep the competition fair and balanced.
+      </p>
+      <div className="split">
         {DIVISIONS.map((division) => (
-          <li key={division.id}>
-            <strong>{division.name}</strong>
-            <span>{division.posterDescriptor} (as described on the official poster)</span>
-          </li>
+          <div key={division.id} className="card">
+            <h3>{division.name}</h3>
+            <p className="muted">{division.posterDescriptor}</p>
+            <ol className="bracket-teams">
+              {TEAMS.filter((t) => t.division === division.id).map((team) => (
+                <li key={team.id}>
+                  <span className="slot">{team.slot}</span>
+                  <span>{teamLabel(team)}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         ))}
-      </ul>
-      <Notice title="How divisions are assigned">
-        <p>
-          The Echelon Pickleball Organizing Committee reviews registrations to promote fair and balanced competition.
-          Final division placement is subject to committee assessment.
-        </p>
-      </Notice>
+      </div>
+      <p>
+        <Link to="/brackets">Search for your name →</Link>
+      </p>
     </>
   )
 }
@@ -90,15 +69,7 @@ export function RegistrationSection() {
           Registration deadline: <strong>{EVENT.registrationDeadline}</strong>
         </li>
       </ul>
-      <Notice tone="warn" title="One entry per player">
-        <p>
-          Each player may enter only once across the entire tournament, regardless of category, division or partner.
-        </p>
-      </Notice>
-      <p>
-        Registration happens on the organizer&apos;s official form, not on this website. Both partners need to be
-        registered.
-      </p>
+      <p>Registration happens on the organizer&apos;s official form, not on this website.</p>
       <p className="actions">
         <RegisterButton />
       </p>
@@ -106,34 +77,26 @@ export function RegistrationSection() {
   )
 }
 
-export function BracketsSection() {
+export function FormatSection() {
   return (
     <>
       <p>
-        In every category, each division is split into brackets of four teams: <strong>Novice 3 brackets</strong>,{' '}
-        <strong>Low Intermediate 4 brackets</strong> and <strong>High Intermediate 3 brackets</strong>, which is{' '}
-        {BRACKETS_PER_CATEGORY} brackets per category.
-      </p>
-      <Notice title="Planned capacity, not confirmed registrations">
-        <p>
-          Across the four categories the plan has {PLANNED_BRACKETS} brackets and {PLANNED_TEAM_POSITIONS} team
-          positions if every bracket fills. That is the planned structure only; it says nothing about how many teams
-          have actually registered.
-        </p>
-      </Notice>
-      <h3>Single round robin: three guaranteed matches</h3>
-      <p>
-        Every bracket plays one round robin. Each team plays every other team in its bracket once, so a bracket has six
-        matches and <strong>every team is guaranteed three matches</strong>.
+        Each division plays one round robin: every pair plays every other pair in its division once. That is{' '}
+        {BRACKET_FORMAT.preliminaryMatchesPerBracket} matches per division and{' '}
+        <strong>{BRACKET_FORMAT.guaranteedMatchesPerTeam} guaranteed matches for every pair</strong>, played in five
+        rounds of three matches on courts 8, 9 and 10.
       </p>
       <BracketMatrix />
       <ol className="wave-list">
-        {ROUND_ROBIN_SEQUENCE.map(([a, b], index) => (
+        {ROUND_ROBIN_ROUNDS.map((pairs, index) => (
           <li key={index}>
-            <span>Wave {index + 1}</span> Team {a} v Team {b}
+            <span>Round {index + 1}</span> {pairs.map(([a, b]) => `Pair ${a} v Pair ${b}`).join(' · ')}
           </li>
         ))}
       </ol>
+      <p>
+        The top four pairs of each division then play the semifinals, followed by the Bronze and Gold medal matches.
+      </p>
     </>
   )
 }
@@ -153,27 +116,34 @@ export function ScheduleVenueSection() {
           </p>
         </div>
       </div>
-      <p>Categories play one after another, three hours each, on all {EVENT.courts} courts:</p>
       <ul className="block-list">
-        {CATEGORY_BLOCKS.map((block) => (
-          <li key={block.category}>
-            <span>{formatRange(block.startMinutes, block.endMinutes)}</span>
-            <strong>{CATEGORIES.find((c) => c.id === block.category)?.name}</strong>
-            <small>All three divisions</small>
-          </li>
-        ))}
+        <li>
+          <span>9:00 AM–1:10 PM</span>
+          <strong>Round robin</strong>
+          <small>Novice and Low Intermediate alternate, courts 8, 9 and 10</small>
+        </li>
+        <li>
+          <span>1:20 PM–2:10 PM</span>
+          <strong>Semifinals</strong>
+          <small>Novice court 8, Low Intermediate court 10</small>
+        </li>
+        <li>
+          <span>2:20 PM–3:10 PM</span>
+          <strong>Bronze and Gold medal matches</strong>
+          <small>Novice court 8, Low Intermediate court 10</small>
+        </li>
+        <li>
+          <span>3:10 PM–3:30 PM</span>
+          <strong>Awarding</strong>
+          <small>All courts</small>
+        </li>
       </ul>
       <p>
-        Inside each block: six 20-minute preliminary waves, 20 minutes of tabulation and qualification, 20 minutes for
-        semifinals, then a planned 20-minute window for the Gold and Bronze matches. Because medal matches have no time
-        cap, that window is a target, not a guaranteed finish time.
+        <Link to="/schedule">See every match time →</Link>
       </p>
       <p>
-        <Link to="/schedule">See the full schedule, court allocation and standard match pattern →</Link>
-      </p>
-      <p>
-        Qourts, the service technology provider, handles delays, match overruns and court adjustments manually on the
-        day. This portal shows the latest officially published schedule.
+        Qourts, the service technology provider, handles delays, match overruns and court adjustments on the day. This
+        portal shows the latest officially published schedule.
       </p>
     </>
   )

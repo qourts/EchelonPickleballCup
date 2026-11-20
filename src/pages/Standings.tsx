@@ -3,7 +3,7 @@ import { DataNotice, SkippedNotice } from '../components/DataNotice.tsx'
 import { DivisionPicker, ResultsTabs, useDivisionChoice } from '../components/DivisionPicker.tsx'
 import { StandingsTable } from '../components/StandingsTable.tsx'
 import { Notice, PageHeader } from '../components/ui.tsx'
-import { categoryInfo, divisionInfo } from '../config/event.ts'
+import { CATEGORIES, categoryInfo, divisionInfo } from '../config/event.ts'
 import { useTournament } from '../hooks/useTournament.ts'
 
 export function Standings() {
@@ -18,7 +18,7 @@ export function Standings() {
       <PageHeader
         eyebrow="Results"
         title="Standings"
-        lead="Preliminary bracket standings from official adjusted scores: win rate, then points earned, then fewest points conceded."
+        lead="Round-robin standings from official adjusted scores: win rate, then points earned, then fewest points conceded, then head-to-head. The top four play the semifinals."
       />
       <ResultsTabs />
       <DivisionPicker {...choice} />
@@ -28,7 +28,8 @@ export function Standings() {
       {division && (
         <section aria-labelledby="standings-title">
           <h2 id="standings-title">
-            {categoryInfo(choice.category).name} · {divisionInfo(choice.division).name}
+            {CATEGORIES.length > 1 && `${categoryInfo(choice.category).name} · `}
+            {divisionInfo(choice.division).name}
           </h2>
           {!anyResults && matches.status === 'ready' && (
             <Notice tone="gold" title="No results yet">

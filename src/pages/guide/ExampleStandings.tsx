@@ -1,11 +1,19 @@
-import { roundRobinPairings } from '../../domain/roundRobin.ts'
 import { rankBracket } from '../../domain/standings.ts'
 import type { Match, Score } from '../../domain/types.ts'
 import { TableScroll } from '../../components/ui.tsx'
 
 const IDS = ['Team 1', 'Team 2', 'Team 3', 'Team 4']
 
-// Official scores by wave. Wave 1 was 8-6 on court when time was called (official 11-6).
+// A four-pair illustration. Match 1 was 8-6 on court when time was called (official 11-6).
+const PAIRS: readonly (readonly [string, string])[] = [
+  ['Team 1', 'Team 2'],
+  ['Team 3', 'Team 4'],
+  ['Team 1', 'Team 3'],
+  ['Team 2', 'Team 4'],
+  ['Team 1', 'Team 4'],
+  ['Team 3', 'Team 2'],
+]
+
 const OFFICIAL: readonly Score[] = [
   { a: 11, b: 6 },
   { a: 11, b: 8 },
@@ -15,15 +23,15 @@ const OFFICIAL: readonly Score[] = [
   { a: 7, b: 11 },
 ]
 
-const matches: Match[] = roundRobinPairings(IDS).map((p, i) => ({
-  id: `example-${p.round}`,
+const matches: Match[] = PAIRS.map(([teamA, teamB], i) => ({
+  id: `example-${i + 1}`,
   stage: 'preliminary',
   category: 'genderless',
   division: 'novice',
   court: null,
   startsAt: null,
-  teamAId: p.teamA,
-  teamBId: p.teamB,
+  teamAId: teamA,
+  teamBId: teamB,
   status: 'completed',
   ...(i === 0 ? { onCourt: { a: 8, b: 6 }, capReached: true } : { official: OFFICIAL[i] }),
 }))
@@ -36,7 +44,7 @@ export function ExampleStandings() {
       <h3>Worked example (illustration only)</h3>
       <p>
         Teams 1 and 2 both finish 2–1 with 28 points earned and 25 conceded, so win rate, PE and PC cannot separate
-        them. Team 1 beat Team 2 in wave 1 (8–6 on court at the cap, an official 11–6), so Team 1 ranks first.
+        them. Team 1 beat Team 2 in their match (8–6 on court at the cap, an official 11–6), so Team 1 ranks first.
       </p>
       <TableScroll label="Worked example standings">
         <table className="data-table">

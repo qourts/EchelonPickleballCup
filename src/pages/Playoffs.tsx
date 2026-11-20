@@ -2,7 +2,7 @@ import { DataNotice, SkippedNotice } from '../components/DataNotice.tsx'
 import { DivisionPicker, ResultsTabs, useDivisionChoice } from '../components/DivisionPicker.tsx'
 import { MatchRow } from '../components/MatchRow.tsx'
 import { Badge, Notice, PageHeader, TableScroll } from '../components/ui.tsx'
-import { categoryInfo, divisionInfo } from '../config/event.ts'
+import { CATEGORIES, categoryInfo, divisionInfo } from '../config/event.ts'
 import type { DivisionQualification, Qualifier } from '../domain/qualification.ts'
 import { tryResolveOfficialScore, winningSide } from '../domain/scoring.ts'
 import { teamLabel, type DivisionView } from '../domain/tournament.ts'
@@ -83,7 +83,6 @@ function SeedTable({ qualifiers, teamsById }: { qualifiers: readonly Qualifier[]
           <tr>
             <th scope="col">Seed</th>
             <th scope="col">Team</th>
-            <th scope="col">From</th>
             <th scope="col">W–L</th>
             <th scope="col">PE</th>
             <th scope="col">PC</th>
@@ -97,7 +96,6 @@ function SeedTable({ qualifiers, teamsById }: { qualifiers: readonly Qualifier[]
                 <span>{teamLabel(teamsById.get(q.teamId))}</span>
                 {q.via === 'wildcard' && <Badge tone="blue">Wildcard</Badge>}
               </td>
-              <td>Bracket {q.bracket}</td>
               <td>
                 {q.record.wins}–{q.record.losses}
               </td>
@@ -210,7 +208,8 @@ export function Playoffs() {
       {division && (
         <section aria-labelledby="playoffs-title">
           <h2 id="playoffs-title">
-            {categoryInfo(choice.category).name} · {divisionInfo(choice.division).name}
+            {CATEGORIES.length > 1 && `${categoryInfo(choice.category).name} · `}
+            {divisionInfo(choice.division).name}
           </h2>
           <QualificationStatus division={division} teamsById={teamsById} />
           {division.qualification.status === 'ready' && (

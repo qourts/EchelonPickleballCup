@@ -39,9 +39,9 @@ export function byPlayingOrder(x: Match, y: Match): number {
  */
 export function buildLiveBoard(
   matches: readonly Match[],
-  options: { category?: CategoryId; courts?: number } = {},
+  options: { category?: CategoryId; courts?: readonly number[] } = {},
 ): LiveBoard {
-  const { category, courts: courtCount = 10 } = options
+  const { category, courts: courtNumbers = [8, 9, 10] } = options
   const relevant = matches.filter((m) => !category || m.category === category)
   const live = relevant.filter((m) => m.status === 'live').sort(byPlayingOrder)
   const scheduled = relevant.filter((m) => m.status === 'scheduled').sort(byPlayingOrder)
@@ -51,13 +51,10 @@ export function buildLiveBoard(
   const upNext = scheduled.filter((m) => startTime(m) === firstTime)
   const queue = scheduled.slice(upNext.length)
 
-  const courts: CourtStatus[] = Array.from({ length: courtCount }, (_, i) => {
-    const court = i + 1
-    return {
-      court,
-      live: live.find((m) => m.court === court) ?? null,
-      next: scheduled.find((m) => m.court === court) ?? null,
-    }
-  })
+  const courts: CourtStatus[] = courtNumbers.map((court) => ({
+    court,
+    live: live.find((m) => m.court === court) ?? null,
+    next: scheduled.find((m) => m.court === court) ?? null,
+  }))
   return { live, upNext, queue, courts }
 }

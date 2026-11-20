@@ -3,6 +3,7 @@ import { Gated } from './components/GatedRoute.tsx'
 import { Layout } from './components/Layout.tsx'
 import type { PortalDataSource } from './data/source.ts'
 import { PortalProvider } from './hooks/PortalProvider.tsx'
+import { Admin } from './pages/Admin.tsx'
 import { Brackets } from './pages/Brackets.tsx'
 import { Guide } from './pages/Guide.tsx'
 import { Home } from './pages/Home.tsx'
@@ -57,6 +58,7 @@ export function App({ source }: { source: PortalDataSource }) {
                 </Gated>
               }
             />
+            <Route path="admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

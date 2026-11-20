@@ -19,7 +19,7 @@ const ITEMS: readonly FaqItem[] = [
   },
   {
     question: 'How many matches am I guaranteed?',
-    answer: 'Three. Every four-team bracket plays a single round robin, so each team meets every other team in its bracket once before the semifinals.',
+    answer: 'Five. Each division of six pairs plays a single round robin, so every pair meets every other pair in its division once before the semifinals.',
   },
   {
     question: 'What happens if my match is not finished after 15 minutes?',
@@ -27,23 +27,19 @@ const ITEMS: readonly FaqItem[] = [
   },
   {
     question: 'Do the Gold and Bronze matches have a time limit?',
-    answer: 'No. They are first to 11, win by two, with no time cap. The planned 20-minute window is a scheduling target, not a deadline.',
+    answer: 'No. They are first to 11, win by two, with no time cap. The planned 25-minute slot is a scheduling target, not a deadline.',
   },
   {
-    question: 'Why is the wildcard always Seed #4?',
-    answer: 'The wildcard is the best second-place team, chosen only against the other second-place teams. It is placed at Seed #4 even if its record is stronger than a bracket winner’s.',
-  },
-  {
-    question: 'What if two teams are tied after win rate, PE and PC?',
-    answer: `Within a bracket, head-to-head decides a two-team tie. Between brackets, teams play a tiebreaker: one match to ${SCORING.tiebreakerTarget} for two teams, or a mini round robin for three. These matches never change preliminary statistics.`,
+    question: 'What if two pairs are tied after win rate, PE and PC?',
+    answer: 'The result of their match against each other decides.',
   },
   {
     question: 'How do I know which division I will play in?',
     answer: 'The Echelon Pickleball Organizing Committee reviews registrations and assigns divisions to promote fair, balanced competition. Final placement is subject to committee assessment.',
   },
   {
-    question: 'When will I find out my bracket and schedule?',
-    answer: `Bracket assignments and player search open on ${PHASE_OPENS_LABEL[2]} at 12:00 AM Philippine time. Standings and playoffs open on ${PHASE_OPENS_LABEL[3]} at 12:00 AM.`,
+    question: 'When do standings and results appear?',
+    answer: `Pairs and match times are already published. Live scores, standings and playoffs open on ${PHASE_OPENS_LABEL[3]} at 12:00 AM Philippine time and update during play.`,
   },
   {
     question: 'When do I need to check in?',
