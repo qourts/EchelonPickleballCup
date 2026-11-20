@@ -33,14 +33,11 @@ describe('publication phases (Asia/Manila)', () => {
     expect(resolvePhase(now, 3)).toBe(3)
   })
 
-  it('shows sections only once their phase is open', () => {
-    expect(isSectionPublished('guide', 1)).toBe(true)
-    expect(isSectionPublished('schedule', 1)).toBe(true)
-    expect(isSectionPublished('brackets', 1)).toBe(false)
-    expect(isSectionPublished('brackets', 2)).toBe(true)
-    expect(isSectionPublished('standings', 2)).toBe(false)
-    expect(isSectionPublished('playoffs', 2)).toBe(false)
-    expect(isSectionPublished('standings', 3)).toBe(true)
-    expect(isSectionPublished('playoffs', 3)).toBe(true)
+  it('shows every section in every phase (date gating lifted by the organizers)', () => {
+    for (const phase of [1, 2, 3] as const) {
+      for (const section of ['guide', 'schedule', 'brackets', 'live', 'standings', 'playoffs'] as const) {
+        expect(isSectionPublished(section, phase)).toBe(true)
+      }
+    }
   })
 })

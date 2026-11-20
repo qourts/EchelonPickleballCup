@@ -15,7 +15,6 @@ const CLOCK_TICK_MS = 30_000
 const STATUS_POLL_MS = 60_000
 const ROSTER_POLL_MS = 5 * 60_000
 const LIVE_MATCH_POLL_MS = 10_000
-const IDLE_MATCH_POLL_MS = 5 * 60_000
 
 type Setter<T> = (update: (previous: ResourceState<T>) => ResourceState<T>) => void
 
@@ -86,8 +85,8 @@ export function PortalProvider({ source, children }: { source: PortalDataSource;
     }
   }, [source, reloadToken])
 
-  // Gated data is only requested once its phase is open.
-  const dataOpen = phase >= 2 && statusSettled
+  // Data is requested once the first status answer is in.
+  const dataOpen = statusSettled
   useEffect(() => {
     if (!dataOpen) return
     const controller = new AbortController()
@@ -96,7 +95,7 @@ export function PortalProvider({ source, children }: { source: PortalDataSource;
     refreshRoster()
     refreshMatches()
     const stopRoster = everyWhileVisible(refreshRoster, ROSTER_POLL_MS)
-    const stopMatches = everyWhileVisible(refreshMatches, phase >= 3 ? LIVE_MATCH_POLL_MS : IDLE_MATCH_POLL_MS)
+    const stopMatches = everyWhileVisible(refreshMatches, LIVE_MATCH_POLL_MS)
     return () => {
       controller.abort()
       stopRoster()

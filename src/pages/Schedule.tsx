@@ -7,7 +7,6 @@ import { DAY_PLAN } from '../config/schedule.ts'
 import { byPlayingOrder } from '../domain/liveBoard.ts'
 import { formatRange } from '../domain/schedule.ts'
 import type { Match } from '../domain/types.ts'
-import { usePortal } from '../hooks/portalContext.ts'
 import { useQueryParam } from '../hooks/useQueryParam.ts'
 import { useTournament } from '../hooks/useTournament.ts'
 
@@ -51,7 +50,6 @@ function DayPlan() {
 }
 
 function PublishedMatches() {
-  const { phase } = usePortal()
   const { roster, matches, view, skipped, reload } = useTournament()
   const [divisionFilter, setDivisionFilter] = useQueryParam<DivisionFilter>('div', DIVISION_FILTERS, 'all')
 
@@ -90,7 +88,7 @@ function PublishedMatches() {
           </li>
         ))}
       </ul>
-      {phase >= 3 && matches.status === 'ready' && (
+      {matches.status === 'ready' && (
         <p className="fine-print">
           <Badge tone="live">Live</Badge> This list refreshes automatically while you keep the page open.
         </p>

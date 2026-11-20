@@ -22,13 +22,13 @@ export const PHASE_OPENS_LABEL: Record<2 | 3, string> = {
   3: 'November 21, 2026',
 }
 
-/** First phase in which each section is visible. */
+/** First phase in which each section is visible. All open: the organizers lifted date-based gating. */
 export const SECTION_MIN_PHASE: Record<PortalSection, Phase> = {
   home: 1,
   guide: 1,
   schedule: 1,
-  brackets: 2,
-  live: 3,
-  standings: 3,
-  playoffs: 3,
+  brackets: 1,
+  live: 1,
+  standings: 1,
+  playoffs: 1,
 }
