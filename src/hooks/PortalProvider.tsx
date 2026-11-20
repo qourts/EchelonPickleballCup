@@ -14,7 +14,7 @@ import { PortalContext, type PortalContextValue, type ResourceState } from './po
 const CLOCK_TICK_MS = 30_000
 const STATUS_POLL_MS = 60_000
 const ROSTER_POLL_MS = 5 * 60_000
-const LIVE_MATCH_POLL_MS = 30_000
+const LIVE_MATCH_POLL_MS = 10_000
 const IDLE_MATCH_POLL_MS = 5 * 60_000
 
 type Setter<T> = (update: (previous: ResourceState<T>) => ResourceState<T>) => void

@@ -58,4 +58,10 @@ export interface Match {
   readonly official?: Score | null
   /** True when a time-capped match ended on the 15-minute cap rather than on points. */
   readonly capReached?: boolean
+  /** Court in the published schedule, when Match Control moved the match elsewhere. */
+  readonly plannedCourt?: number
+  /** A note Match Control chose to show to players. */
+  readonly note?: string
+  /** The result was recorded as a forfeit. */
+  readonly forfeit?: boolean
 }

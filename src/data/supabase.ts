@@ -40,7 +40,7 @@ export async function callRpc<T>(name: string, args: object = {}, accessToken?: 
   }
 }
 
-interface MatchRow {
+export interface MatchRow {
   readonly id: string
   readonly division: string
   readonly stage: string
@@ -53,12 +53,15 @@ interface MatchRow {
   readonly onCourt: unknown
   readonly official: unknown
   readonly capReached: boolean
+  readonly plannedCourt?: number
+  readonly note?: string | null
+  readonly forfeit?: boolean
 }
 
 const PLANNED = new Map(EVENT_MATCHES.map((m) => [m.id, m]))
 
 /** Shape a database row like every other match in the portal; parseMatches validates it. */
-function toMatch(row: MatchRow) {
+export function toMatch(row: MatchRow) {
   const planned = PLANNED.get(row.id)
   return {
     id: row.id,
@@ -78,6 +81,9 @@ function toMatch(row: MatchRow) {
     onCourt: row.onCourt,
     official: row.official,
     capReached: row.capReached,
+    plannedCourt: row.plannedCourt,
+    note: row.note,
+    forfeit: row.forfeit,
   }
 }
 

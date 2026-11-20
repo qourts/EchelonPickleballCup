@@ -38,6 +38,9 @@ export function MatchRow({ match, teamsById }: { match: Match; teamsById: Readon
       <div className="match-when">
         <span className="match-time">{formatManilaTime(match.startsAt)}</span>
         <span className="match-court">{match.court ? `Court ${match.court}` : 'Court TBA'}</span>
+        {match.plannedCourt && match.court && match.plannedCourt !== match.court && (
+          <span className="match-moved">Moved here from Court {match.plannedCourt}</span>
+        )}
       </div>
       <div className="match-body">
         <p className="match-stage">{stageLabel(match)}</p>
@@ -49,6 +52,8 @@ export function MatchRow({ match, teamsById }: { match: Match; teamsById: Readon
           <span>{sideName(match, 'b', teamsById)}</span>
           {shown && <span className="match-score">{shown.b}</span>}
         </p>
+        {match.forfeit && <p className="match-note">Result recorded as a forfeit.</p>}
+        {match.note && <p className="match-note match-public-note">{match.note}</p>}
         {adjusted && match.onCourt && (
           <p className="match-note">
             Official adjusted score. Played on court: {match.onCourt.a}–{match.onCourt.b} (15-minute cap).

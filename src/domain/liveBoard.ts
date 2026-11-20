@@ -1,21 +1,21 @@
 import type { CategoryId, Match } from './types.ts'
 
-export interface CourtStatus {
+export interface CourtStatus<M extends Match = Match> {
   readonly court: number
   /** Match in progress on this court, if any. */
-  readonly live: Match | null
+  readonly live: M | null
   /** Next scheduled match on this court. */
-  readonly next: Match | null
+  readonly next: M | null
 }
 
-export interface LiveBoard {
+export interface LiveBoard<M extends Match = Match> {
   /** Matches in progress, by court. */
-  readonly live: readonly Match[]
+  readonly live: readonly M[]
   /** The earliest scheduled start time still to play, across all courts. */
-  readonly upNext: readonly Match[]
+  readonly upNext: readonly M[]
   /** Every scheduled match after that, in playing order. */
-  readonly queue: readonly Match[]
-  readonly courts: readonly CourtStatus[]
+  readonly queue: readonly M[]
+  readonly courts: readonly CourtStatus<M>[]
 }
 
 function startTime(match: Match): number {
@@ -37,10 +37,10 @@ export function byPlayingOrder(x: Match, y: Match): number {
  * Matches whose start time has passed but are still `scheduled` stay at the front of the
  * queue until Match Control marks them live.
  */
-export function buildLiveBoard(
-  matches: readonly Match[],
+export function buildLiveBoard<M extends Match>(
+  matches: readonly M[],
   options: { category?: CategoryId; courts?: readonly number[] } = {},
-): LiveBoard {
+): LiveBoard<M> {
   const { category, courts: courtNumbers = [8, 9, 10] } = options
   const relevant = matches.filter((m) => !category || m.category === category)
   const live = relevant.filter((m) => m.status === 'live').sort(byPlayingOrder)
@@ -51,7 +51,7 @@ export function buildLiveBoard(
   const upNext = scheduled.filter((m) => startTime(m) === firstTime)
   const queue = scheduled.slice(upNext.length)
 
-  const courts: CourtStatus[] = courtNumbers.map((court) => ({
+  const courts: CourtStatus<M>[] = courtNumbers.map((court) => ({
     court,
     live: live.find((m) => m.court === court) ?? null,
     next: scheduled.find((m) => m.court === court) ?? null,

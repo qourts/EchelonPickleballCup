@@ -9,6 +9,9 @@ only, configured in [`src/config/backend.ts`](../src/config/backend.ts).
 1. Open the project's **SQL Editor**, paste [`supabase/echelon_cup.sql`](../supabase/echelon_cup.sql)
    and run it. It creates a private schema `echelon_cup` (not exposed through the API) with the
    38 scheduled matches, an audit log and four functions. It touches no existing table.
+   Then run [`supabase/echelon_cup_v2.sql`](../supabase/echelon_cup_v2.sql) the same way: it adds
+   Start/Undo start, point-by-point scoring, Confirm, Forfeit, Reopen/Reset with a reason, court
+   moves, notes, the activity log and scorer/supervisor roles. It keeps all existing data.
 2. Create each official under **Authentication → Users** (email and password).
 3. Make them admins by running, in the SQL Editor, one line per person:
    `insert into echelon_cup.admins (email) values ('official@example.com');` (lowercase email).

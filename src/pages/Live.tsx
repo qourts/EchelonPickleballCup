@@ -111,7 +111,7 @@ export function Live() {
                     · next start <strong>{formatManilaTime(board.upNext[0].startsAt)}</strong>
                   </>
                 )}{' '}
-                · <strong>{board.upNext.length + board.queue.length}</strong> waiting · refreshes every 30 seconds
+                · <strong>{board.upNext.length + board.queue.length}</strong> waiting · refreshes every 10 seconds
               </p>
               <ul className="court-grid" aria-label="Courts">
                 {board.courts.map((status) => (

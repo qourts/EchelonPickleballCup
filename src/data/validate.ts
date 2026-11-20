@@ -119,6 +119,9 @@ export function parseMatch(value: unknown): Match | null {
     onCourt: onCourt ?? null,
     official: official ?? null,
     capReached: typeof value.capReached === 'boolean' ? value.capReached : undefined,
+    plannedCourt: typeof value.plannedCourt === 'number' && Number.isInteger(value.plannedCourt) ? value.plannedCourt : undefined,
+    note: typeof value.note === 'string' && value.note.trim() !== '' ? value.note.slice(0, 500) : undefined,
+    forfeit: value.forfeit === true ? true : undefined,
   }
 }
 
