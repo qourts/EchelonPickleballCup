@@ -1,5 +1,5 @@
 /**
- * Match Control backend (Supabase project "Match Coontrol", dedicated to this event).
+ * Match Control backend (Supabase project "Match Control", dedicated to this event).
  * The publishable key is designed to be public: it can only call the functions granted to
  * anonymous users (reading the schedule and results). Never put a secret or service-role key here.
  */

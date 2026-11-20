@@ -1,6 +1,6 @@
 # Match Control backend (Supabase)
 
-Scores live in the Supabase project **Match Coontrol**, created for this event
+Scores live in the Supabase project **Match Control**, created for this event
 (`https://dbtviepuwvtvslhgfolh.supabase.co`). The website talks to it with the publishable key
 only, configured in [`src/config/backend.ts`](../src/config/backend.ts).
 
