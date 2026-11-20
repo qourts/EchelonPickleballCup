@@ -1,96 +1,21 @@
-# Echelon Pickleball Cup 2026: Player Guide and Player Portal
+# Echelon Pickleball Cup 2026 — Player Portal
 
-Public, read-only, mobile-first website for the Echelon Pickleball Cup 2026
-(Saturday, November 21, 2026 at Kingcourts, San Fernando, Pampanga). It is a Player Guide
-before the event and a tournament companion on the day.
+Standalone, mobile-first player portal for the Echelon Pickleball Cup, November 21, 2026, Kingcourts, San Fernando, Pampanga.
 
-> All net proceeds from the Echelon Pickleball Cup 2026 will benefit the Echelon Eagles Medical Mission.
+## What is in this repository
+- `index.html` — the player portal in one file (pages, styles, logos, poster and fonts are embedded).
+- `qourtsadmin/index.html` — Match Control, the officials' scoring console. It needs a match-control sign-in.
+- `CHANGELOG.md` — what changed in each upload.
 
-Live site (once Pages is enabled): https://qourts.github.io/EchelonPickleballCup/
-Registration is handled on the organizer's existing form, not on this site.
+Live scores, the queue and standings load from the Qourts Match Control database while a page is open.
 
-## What is on the site
+## Publish on GitHub Pages
+**Settings → Pages → Build and deployment**: choose **Deploy from a branch**, select **main** and **/(root)**, then save.
 
-| Section | Opens (Philippine time) | Contents |
-| --- | --- | --- |
-| Home, Player Guide, Schedule | always | Event facts, rules, scoring and the 15-minute rule (with a live converter), standings and seeding explained, FAQ, category blocks, courts |
-| Brackets and player search | Nov 18, 2026, 12:00 AM | Bracket assignments, partial/case-insensitive name search, published match times |
-| Live & upcoming | Nov 21, 2026, 12:00 AM | On court now, up next, a tile per court, and the queue in playing order; refreshes every 30 seconds |
-| Standings and Playoffs | Nov 21, 2026, 12:00 AM | Bracket standings, wildcard and seeds, semifinal pairings, Gold/Bronze, medal results, live refresh |
+Player portal: `https://qourts.github.io/EchelonPickleballCup/`
+Match Control: `https://qourts.github.io/EchelonPickleballCup/qourtsadmin/`
 
-Without a data feed the site is a complete Player Guide and shows honest pending states. It
-never displays sample data as if it were real.
+## Updating
+Upload the new files over the old ones (keep the `qourtsadmin` folder) and commit. GitHub Pages republishes in about a minute; phones may keep the old copy for up to 10 minutes, so refresh before checking.
 
-## Quick start
-
-```bash
-npm ci
-npm run dev                  # http://localhost:5173/
-npm run dev -- --mode demo   # same, with synthetic demo data (dev only)
-npm run check                # lint + typecheck + tests + production build + dist check
-```
-
-Preview a phase in the dev server with `?now=`, for example
-`http://localhost:5173/?now=2026-11-18T00:00:00%2B08:00#/brackets`. In demo mode the match day follows `?now=`, so `?now=2026-11-21T09:50:00%2B08:00#/live` shows matches in progress.
-
-Requires Node 20.19+ or 22.12+ (CI uses Node 22).
-
-## Scripts
-
-| Script | Does |
-| --- | --- |
-| `npm run dev` | Vite dev server |
-| `npm run build` | Typecheck, production build to `dist/`, then `scripts/check-dist.mjs` |
-| `npm run preview` | Serve the build at `/EchelonPickleballCup/` |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc -b` |
-| `npm test` | Vitest |
-
-## Architecture
-
-```
-src/
-  config/     event facts, scoring constants, schedule, publication dates (edit here)
-  domain/     pure competition logic: scoring, round robin, standings, tiebreakers,
-              qualification, search, phases, tournament view  (fully unit tested)
-  data/       PortalDataSource interface, HTTP source, response validation
-  fixtures/   SYNTHETIC demo data, dev server and tests only
-  hooks/      PortalProvider (phase clock, server status, polling) and hooks
-  components/ shared UI;  pages/ route pages;  styles/ plain CSS with design tokens
-docs/         INTEGRATION.md, DEPLOYMENT.md, RULES.md
-```
-
-Stack: React 19, TypeScript, Vite, React Router (hash routing), Vitest. No backend, no UI
-framework, one self-hosted display font (Barlow Condensed).
-
-## Publication phases and data safety
-
-* Phases switch at Philippine midnight (`+08:00` instants in
-  [`src/config/publication.ts`](src/config/publication.ts)). Nav items appear when their phase
-  opens and direct links show an "Opens ..." notice before then.
-* Hiding things in the browser is not security. **Unreleased roster and bracket data is never
-  in this repository or in `dist/`.** Phase 2 and 3 data comes from a Qourts-controlled API that
-  refuses early requests; the site only asks once the phase is open. A build guard fails if
-  fixtures or data-like files reach `dist/`. Authorized overrides are made by changing the phase
-  that the API reports. See [docs/INTEGRATION.md](docs/INTEGRATION.md).
-* Player data is names only; any other field a source sends is dropped.
-
-## Rules
-
-Implemented rules and their tests are listed in [docs/RULES.md](docs/RULES.md), including the
-cases deliberately left pending an organizer decision (ties of four or more teams; unspecified
-in-bracket three-way ties).
-
-## Deployment
-
-GitHub Actions publishes to GitHub Pages on every push to `main`. One-time setup and
-verification steps are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
-
-## Open items
-
-* Qourts must provide the portal API described in [docs/INTEGRATION.md](docs/INTEGRATION.md)
-  before bracket assignments, search, standings and playoffs can show real data.
-* The registration URL was decoded from the poster QR code and has not been tested live.
-* The registration deadline is November 14, 2026 (no time of day has been given). Skill-rating thresholds, technical-call penalties and forfeit scoring are unannounced and
-  are shown as such.
-* The poster still carries older text (8:00 PM, "Kings Court"); it is shown unchanged.
+The source code is kept outside this repository; these files are generated from it.
