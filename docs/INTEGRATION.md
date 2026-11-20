@@ -1,7 +1,7 @@
 # Match Control backend (Supabase)
 
-Scores live in the Supabase project **Qourts Match Control – Staging**
-(`https://donhaqhhrkzbiwawwvqe.supabase.co`). The website talks to it with the publishable key
+Scores live in the Supabase project **Match Coontrol**, created for this event
+(`https://dbtviepuwvtvslhgfolh.supabase.co`). The website talks to it with the publishable key
 only, configured in [`src/config/backend.ts`](../src/config/backend.ts).
 
 ## One-time setup
